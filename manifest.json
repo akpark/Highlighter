@@ -5,10 +5,18 @@
   "description": "This extension lets you take highlights and store them",
   "version": "1.0",
 
+  "browser_action": {
+
+  },
+
+  "background": {
+    "scripts": ["index.js"]
+  },
+
   "commands": {
     "save-highlight": {
       "suggested_key": {
-        "default": "Ctrl+Shift+H"
+        "default": "Ctrl+Shift+7"
       },
       "description": "Save selected text"
     }
@@ -16,6 +24,7 @@
 
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ]
 }
