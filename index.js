@@ -33,5 +33,10 @@ function saveHighlight() {
 }
 
 chrome.browserAction.onClicked.addListener((activeTab) => {
+  debugger
   chrome.tabs.create({ url: "./index.html" });
-})
+});
+
+// $(".all-highlights-link").on("click", function(e) {
+//   chrome.tabs.create({ url: "./index.html" });
+// });

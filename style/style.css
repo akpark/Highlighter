@@ -1,0 +1,33 @@
+.popup-container {
+  text-align: center;
+  width: 200px;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.popup-container button  {
+  margin: 20px 0;
+}
+
+.all-highlights-link {
+
+}
+
+.highlights-index {
+  margin-top: 10px;
+}
+
+.highlights-index i {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.highlights-index i:hover {
+  opacity: 1;
+}
+
+.highlighted-text {
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}

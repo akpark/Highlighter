@@ -11,8 +11,8 @@ class HighlightsIndex extends Component {
     return this.props.highlights.map((highlight) => {
       return (
         <li className="list-group-item" key={highlight._id}>
-          <h5>Title: {highlight.title}</h5>
-          <h6>Description: {highlight.description}</h6>
+          <h5>{highlight.title} <i className="fa fa-trash pull-right"></i></h5>
+          <h6 className="highlighted-text">{highlight.description}</h6>
         </li>
       );
     });
@@ -24,8 +24,7 @@ class HighlightsIndex extends Component {
     }
 
     return (
-      <div>
-        <h3>Highlights</h3>
+      <div className="highlights-index">
         <ul className="list-group">
           {this.renderHighlights()}
         </ul>
@@ -35,7 +34,7 @@ class HighlightsIndex extends Component {
 }
 
 function mapStateToProps(state) {
-  return { highlights: state.highlights }
+  return { highlights: state.highlights.all }
 }
 
 export default connect(mapStateToProps, { fetchHighlights })(HighlightsIndex);
