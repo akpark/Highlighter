@@ -73,7 +73,7 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _app = __webpack_require__(208);
+	var _app = __webpack_require__(204);
 
 	var _app2 = _interopRequireDefault(_app);
 
@@ -22721,16 +22721,24 @@
 	    case _index.FETCH_HIGHLIGHTS:
 	      return { all: action.payload.highlights, active: action.payload.highlights };
 	    case _index.SEARCH_HIGHLIGHTS:
+	      debugger;
 	      var activeHighlights = _lodash2.default.filter(state.all, function (highlight) {
 	        return _lodash2.default.includes(highlight.description, action.payload);
 	      });
 	      return { all: state.all, active: activeHighlights };
+	    case _index.DELETE_HIGHLIGHT:
+	      var newHighlights = _lodash2.default.filter(state.all, function (highlight) {
+	        return _lodash2.default.includes(highlight.id !== action.payload);
+	      });
+	      chrome.storage.local.set({ "highlights": newHighlights });
+
+	      return { all: newHighlights, active: newHighlights };
 	    default:
 	      return state;
 	  }
 	};
 
-	var _lodash = __webpack_require__(204);
+	var _lodash = __webpack_require__(209);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -22742,6 +22750,590 @@
 
 /***/ },
 /* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _highlights_index = __webpack_require__(205);
+
+	var _highlights_index2 = _interopRequireDefault(_highlights_index);
+
+	var _searchbar = __webpack_require__(208);
+
+	var _searchbar2 = _interopRequireDefault(_searchbar);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var App = function (_Component) {
+	  _inherits(App, _Component);
+
+	  function App() {
+	    _classCallCheck(this, App);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	  }
+
+	  _createClass(App, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Highlights'
+	        ),
+	        _react2.default.createElement(_searchbar2.default, null),
+	        _react2.default.createElement(_highlights_index2.default, null)
+	      );
+	    }
+	  }]);
+
+	  return App;
+	}(_react.Component);
+
+	exports.default = App;
+
+/***/ },
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(169);
+
+	var _index = __webpack_require__(206);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HighlightsIndex = function (_Component) {
+	  _inherits(HighlightsIndex, _Component);
+
+	  function HighlightsIndex(props) {
+	    _classCallCheck(this, HighlightsIndex);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HighlightsIndex).call(this, props));
+
+	    _this.onDeleteHighlight = _this.onDeleteHighlight.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(HighlightsIndex, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.fetchHighlights();
+	    }
+	  }, {
+	    key: 'onDeleteHighlight',
+	    value: function onDeleteHighlight(id) {
+	      debugger;
+	      this.props.deleteHighlight(id);
+	    }
+	  }, {
+	    key: 'renderHighlights',
+	    value: function renderHighlights() {
+	      var _this2 = this;
+
+	      return this.props.activeHighlights.map(function (highlight) {
+	        return _react2.default.createElement(
+	          'li',
+	          { className: 'list-group-item', key: highlight._id },
+	          _react2.default.createElement(
+	            'h5',
+	            { className: 'highlight-title' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: highlight.url },
+	              highlight.title
+	            ),
+	            _react2.default.createElement('span', { onClick: function onClick() {
+	                return _this2.onDeleteHighlight(highlight._id);
+	              }, className: 'fa fa-trash pull-right trash' })
+	          ),
+	          _react2.default.createElement(
+	            'h6',
+	            { className: 'highlighted-text' },
+	            highlight.description
+	          )
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      if (!this.props.activeHighlights) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'Loading...'
+	        );
+	      }
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'highlights-index' },
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'list-group' },
+	          this.renderHighlights()
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HighlightsIndex;
+	}(_react.Component);
+
+	function mapStateToProps(state) {
+	  return { activeHighlights: state.highlights.active };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _index.fetchHighlights, deleteHighlight: _index.deleteHighlight })(HighlightsIndex);
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.SEARCH_HIGHLIGHTS = exports.DELETE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = exports.FETCH_HIGHLIGHTS = undefined;
+	exports.fetchHighlights = fetchHighlights;
+	exports.deleteHighlight = deleteHighlight;
+	exports.searchHighlights = searchHighlights;
+
+	var _chromeStorageWrapper = __webpack_require__(207);
+
+	var _chromeStorageWrapper2 = _interopRequireDefault(_chromeStorageWrapper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var FETCH_HIGHLIGHTS = exports.FETCH_HIGHLIGHTS = 'FETCH_HIGHLIGHTS';
+	var CREATE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
+	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
+	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
+
+	function fetchHighlights() {
+	  var request = _chromeStorageWrapper2.default.get("highlights", "local");
+
+	  return {
+	    type: FETCH_HIGHLIGHTS,
+	    payload: request
+	  };
+	}
+
+	function deleteHighlight(id) {
+	  return {
+	    type: DELETE_HIGHLIGHT,
+	    payload: id
+	  };
+	}
+
+	function searchHighlights(term) {
+	  debugger;
+	  return {
+	    type: SEARCH_HIGHLIGHTS,
+	    payload: term
+	  };
+	}
+
+/***/ },
+/* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	/*!
+	 * chrome-storage.js
+	 * https://github.com/lmk123/chrome-storage-wrapper
+	 *
+	 * Version: 0.1.0
+	 * Author: Milk Lee <me@limingkai.cn>
+	 * Release under MIT license.
+	 */
+	(function (factory) {
+	  if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ('undefined' !== typeof module && module.exports) {
+	    module.exports = factory();
+	  } else {
+	    window.chromeStorage = factory();
+	  }
+	})(function () {
+	  var _chrome = chrome;
+	  var storage = _chrome.storage;
+	  var runtime = _chrome.runtime;
+	  var changeCallbacks = [];
+
+	  var context = 'local',
+	      defaultStorage = storage[context];
+
+	  var module = {
+
+	    /**
+	     * 封装一层获取方法
+	     * @param {Object|String[]|String} keys - 可以是一个对象：{ key1:'null', key2:''}；也可以是一个数组：['key1','key2']；也可以是一个字符串：'key'
+	     * @param {String} [area]
+	     * @returns {Promise}
+	     */
+
+	    get: function get(keys, area) {
+	      return new Promise(function (resolve, reject) {
+	        getCurrentStorage(area).get(keys, function (items) {
+	          var err = runtime.lastError;
+	          if (err) {
+	            reject(err);
+	          } else {
+	            resolve(items);
+	          }
+	        });
+	      });
+	    },
+
+	    /**
+	     * 获取存储区域的所有数据
+	     * @param {String} [area]
+	     */
+	    getAll: function getAll(area) {
+	      return module.get(null, area);
+	    },
+
+	    /**
+	     * 封装一层设置方法
+	     * @param {Object|String} key - 如果传了 value 参数，那么它只能是字符串
+	     * @param {*} [value] - 当以  .set('key', value) 的形式调用时，key 只能是一个字符串
+	     * @param {String} [area]
+	     * @returns {Promise}
+	     */
+	    set: function set(key, value, area) {
+	      var obj = undefined;
+	      if ('object' === (typeof key === 'undefined' ? 'undefined' : _typeof(key))) {
+	        obj = key;
+	        area = value;
+	      } else {
+	        obj = {};
+	        obj[key] = value;
+	      }
+	      return new Promise(function (resolve, reject) {
+	        getCurrentStorage(area).set(obj, function () {
+	          var err = runtime.lastError;
+	          if (err) {
+	            reject(err);
+	          } else {
+	            resolve();
+	          }
+	        });
+	      });
+	    },
+
+	    /**
+	     * 封装一层删除方法
+	     * @param {Object|String[]|String} keys - 可以是一个对象：{ key1:'null', key2:''}；也可以是一个数组：['key1','key2']；也可以是一个字符串：'key'
+	     * @param {String} [area]
+	     * @returns {Promise}
+	     */
+	    remove: function remove(keys, area) {
+	      return new Promise(function (resolve, reject) {
+	        getCurrentStorage(area).remove(keys, function (items) {
+	          var err = runtime.lastError;
+	          if (err) {
+	            reject(err);
+	          } else {
+	            resolve(items);
+	          }
+	        });
+	      });
+	    },
+
+	    /**
+	     * 封装一层 clear 方法
+	     * @param {String} [area]
+	     * @returns Promise
+	     */
+	    clear: function clear(area) {
+	      return new Promise(function (resolve, reject) {
+	        getCurrentStorage(area).clear(function () {
+	          var err = runtime.lastError;
+	          if (err) {
+	            reject(err);
+	          } else {
+	            resolve();
+	          }
+	        });
+	      });
+	    },
+
+	    /**
+	     * 获取当前的默认存储区域
+	     * @returns {String}
+	     */
+	    get defaultArea() {
+	      return context;
+	    },
+
+	    /**
+	     * 设置当前的默认存储区域
+	     * @param {String} area
+	     */
+	    set defaultArea(area) {
+	      noAreaError(area);
+	      context = area;
+	      defaultStorage = storage[context];
+	    },
+
+	    /**
+	     * 注册 change 事件。
+	     * 注意，回调里面的第一个参数仅包含最新值，
+	     * 而不是一个有newValue和oldValue的对象。
+	     * 见下面的事件监听函数。
+	     * @param {Function} listener
+	     * @param [options]
+	     * @param {String[]} [options.keys] - 关心哪些键的变化
+	     * @param {String[]} [options.areas] - 关心哪些存储区域的变化
+	     * @returns {Function} 最后实际生成的监听函数
+	     */
+	    addChangeListener: function addChangeListener(listener, options) {
+
+	      if (!options) {
+	        options = {};
+	      }
+
+	      var _options = options;
+	      var keys = _options.keys;
+	      var areas = _options.areas;var newListener = undefined;
+
+	      if ('string' === typeof keys) {
+	        keys = [keys];
+	      }
+
+	      if ('string' === typeof areas) {
+	        areas = [areas];
+	      }
+
+	      newListener = function (changes, area) {
+	        if (Array.isArray(areas)) {
+	          if (areas.indexOf(area) < 0) {
+	            return;
+	          }
+	        }
+
+	        var keysIsArray = Array.isArray(keys),
+	            myChanges = {};
+
+	        for (var key in changes) {
+	          if (!keysIsArray || keys.indexOf(key) >= 0) {
+	            myChanges[key] = changes[key];
+	          }
+	        }
+
+	        for (var hasMyChange in myChanges) {
+	          listener(myChanges, area);
+	          break;
+	        }
+	      };
+	      changeCallbacks.push(newListener);
+	      return newListener;
+	    },
+
+	    /**
+	     * 删除一个监听函数
+	     * @param {Function} newListener
+	     */
+	    removeChangeListener: function removeChangeListener(newListener) {
+	      var index = changeCallbacks.indexOf(newListener);
+	      if (index >= 0) {
+	        changeCallbacks.splice(index, 1);
+	      }
+	    },
+
+	    /**
+	     * 在存储区域间同步数据
+	     * @param {String} [from]
+	     * @param {String} [to]
+	     * @returns {Promise}
+	     */
+	    sync: function sync() {
+	      var from = arguments.length <= 0 || arguments[0] === undefined ? 'local' : arguments[0];
+	      var to = arguments.length <= 1 || arguments[1] === undefined ? 'sync' : arguments[1];
+
+	      return Promise.all([module.getAll(from), module.clear(to)]).then(function (_ref) {
+	        var _ref2 = _slicedToArray(_ref, 1);
+
+	        var data = _ref2[0];
+	        return module.set(data, to);
+	      });
+	    }
+	  };
+
+	  storage.onChanged.addListener(function (changes, area) {
+	    var customChanges = {};
+
+	    for (var key in changes) {
+	      customChanges[key] = changes[key].newValue;
+	    }
+
+	    changeCallbacks.forEach(function (newListener) {
+	      newListener(customChanges, area);
+	    });
+	  });
+
+	  return module;
+
+	  /**
+	   * 获取默认的存储空间
+	   * @param {String} [area]
+	   * @returns {chrome.storage.StorageArea}
+	   */
+	  function getCurrentStorage(area) {
+	    var currentStorage = undefined;
+	    if (undefined === area) {
+	      currentStorage = defaultStorage;
+	    } else {
+	      noAreaError(area);
+	      currentStorage = storage[area];
+	    }
+	    return currentStorage;
+	  }
+
+	  /**
+	   * 如果没有指定的存储区域则报错
+	   * @param {String} area
+	   */
+	  function noAreaError(area) {
+	    if (!storage[area]) {
+	      throw new Error('chrome.storage 不支持 ' + area + ' 存储区域。');
+	    }
+	  }
+	});
+
+	//# sourceMappingURL=chrome-storage.js.map
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(169);
+
+	var _index = __webpack_require__(206);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SearchBar = function (_Component) {
+	  _inherits(SearchBar, _Component);
+
+	  function SearchBar(props) {
+	    _classCallCheck(this, SearchBar);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
+
+	    _this.state = { term: '' };
+
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(SearchBar, [{
+	    key: 'onInputChange',
+	    value: function onInputChange(event) {
+	      this.setState({ term: event.target.value });
+	      this.props.searchHighlights(event.target.value);
+	    }
+	  }, {
+	    key: 'onFormSubmit',
+	    value: function onFormSubmit(event) {
+	      event.preventDefault();
+
+	      this.props.searchHighlights(this.state.term);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'form',
+	        { onSubmit: this.onFormSubmit, className: 'input-group input-group-sm' },
+	        _react2.default.createElement('input', {
+	          placeholder: 'Search through your highlights',
+	          className: 'form-control',
+	          value: this.state.term,
+	          onChange: this.onInputChange }),
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'input-group-btn' },
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-primary' },
+	            'Search'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SearchBar;
+	}(_react.Component);
+
+	exports.default = (0, _reactRedux.connect)(null, { searchHighlights: _index.searchHighlights })(SearchBar);
+
+/***/ },
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -38894,10 +39486,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(205)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(210)(module), (function() { return this; }())))
 
 /***/ },
-/* 205 */
+/* 210 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -38911,581 +39503,6 @@
 		return module;
 	}
 
-
-/***/ },
-/* 206 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.SEARCH_HIGHLIGHTS = exports.DELETE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = exports.FETCH_HIGHLIGHTS = undefined;
-	exports.fetchHighlights = fetchHighlights;
-	exports.deleteHighlight = deleteHighlight;
-	exports.searchHighlights = searchHighlights;
-
-	var _chromeStorageWrapper = __webpack_require__(207);
-
-	var _chromeStorageWrapper2 = _interopRequireDefault(_chromeStorageWrapper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var FETCH_HIGHLIGHTS = exports.FETCH_HIGHLIGHTS = 'FETCH_HIGHLIGHTS';
-	var CREATE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
-	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
-	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
-
-	function fetchHighlights() {
-	  var request = _chromeStorageWrapper2.default.get("highlights", "local");
-
-	  return {
-	    type: FETCH_HIGHLIGHTS,
-	    payload: request
-	  };
-	}
-
-	function deleteHighlight(id) {
-	  // const request = chromeStorage.remove(...)
-
-	  return {
-	    type: DELETE_HIGHLIGHT,
-	    payload: request
-	  };
-	}
-
-	function searchHighlights(term) {
-	  // const request = chromeStorage.get("highlights", "local")
-
-	  return {
-	    type: SEARCH_HIGHLIGHTS,
-	    payload: term
-	  };
-	}
-
-/***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
-
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	/*!
-	 * chrome-storage.js
-	 * https://github.com/lmk123/chrome-storage-wrapper
-	 *
-	 * Version: 0.1.0
-	 * Author: Milk Lee <me@limingkai.cn>
-	 * Release under MIT license.
-	 */
-	(function (factory) {
-	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if ('undefined' !== typeof module && module.exports) {
-	    module.exports = factory();
-	  } else {
-	    window.chromeStorage = factory();
-	  }
-	})(function () {
-	  var _chrome = chrome;
-	  var storage = _chrome.storage;
-	  var runtime = _chrome.runtime;
-	  var changeCallbacks = [];
-
-	  var context = 'local',
-	      defaultStorage = storage[context];
-
-	  var module = {
-
-	    /**
-	     * 封装一层获取方法
-	     * @param {Object|String[]|String} keys - 可以是一个对象：{ key1:'null', key2:''}；也可以是一个数组：['key1','key2']；也可以是一个字符串：'key'
-	     * @param {String} [area]
-	     * @returns {Promise}
-	     */
-
-	    get: function get(keys, area) {
-	      return new Promise(function (resolve, reject) {
-	        getCurrentStorage(area).get(keys, function (items) {
-	          var err = runtime.lastError;
-	          if (err) {
-	            reject(err);
-	          } else {
-	            resolve(items);
-	          }
-	        });
-	      });
-	    },
-
-	    /**
-	     * 获取存储区域的所有数据
-	     * @param {String} [area]
-	     */
-	    getAll: function getAll(area) {
-	      return module.get(null, area);
-	    },
-
-	    /**
-	     * 封装一层设置方法
-	     * @param {Object|String} key - 如果传了 value 参数，那么它只能是字符串
-	     * @param {*} [value] - 当以  .set('key', value) 的形式调用时，key 只能是一个字符串
-	     * @param {String} [area]
-	     * @returns {Promise}
-	     */
-	    set: function set(key, value, area) {
-	      var obj = undefined;
-	      if ('object' === (typeof key === 'undefined' ? 'undefined' : _typeof(key))) {
-	        obj = key;
-	        area = value;
-	      } else {
-	        obj = {};
-	        obj[key] = value;
-	      }
-	      return new Promise(function (resolve, reject) {
-	        getCurrentStorage(area).set(obj, function () {
-	          var err = runtime.lastError;
-	          if (err) {
-	            reject(err);
-	          } else {
-	            resolve();
-	          }
-	        });
-	      });
-	    },
-
-	    /**
-	     * 封装一层删除方法
-	     * @param {Object|String[]|String} keys - 可以是一个对象：{ key1:'null', key2:''}；也可以是一个数组：['key1','key2']；也可以是一个字符串：'key'
-	     * @param {String} [area]
-	     * @returns {Promise}
-	     */
-	    remove: function remove(keys, area) {
-	      return new Promise(function (resolve, reject) {
-	        getCurrentStorage(area).remove(keys, function (items) {
-	          var err = runtime.lastError;
-	          if (err) {
-	            reject(err);
-	          } else {
-	            resolve(items);
-	          }
-	        });
-	      });
-	    },
-
-	    /**
-	     * 封装一层 clear 方法
-	     * @param {String} [area]
-	     * @returns Promise
-	     */
-	    clear: function clear(area) {
-	      return new Promise(function (resolve, reject) {
-	        getCurrentStorage(area).clear(function () {
-	          var err = runtime.lastError;
-	          if (err) {
-	            reject(err);
-	          } else {
-	            resolve();
-	          }
-	        });
-	      });
-	    },
-
-	    /**
-	     * 获取当前的默认存储区域
-	     * @returns {String}
-	     */
-	    get defaultArea() {
-	      return context;
-	    },
-
-	    /**
-	     * 设置当前的默认存储区域
-	     * @param {String} area
-	     */
-	    set defaultArea(area) {
-	      noAreaError(area);
-	      context = area;
-	      defaultStorage = storage[context];
-	    },
-
-	    /**
-	     * 注册 change 事件。
-	     * 注意，回调里面的第一个参数仅包含最新值，
-	     * 而不是一个有newValue和oldValue的对象。
-	     * 见下面的事件监听函数。
-	     * @param {Function} listener
-	     * @param [options]
-	     * @param {String[]} [options.keys] - 关心哪些键的变化
-	     * @param {String[]} [options.areas] - 关心哪些存储区域的变化
-	     * @returns {Function} 最后实际生成的监听函数
-	     */
-	    addChangeListener: function addChangeListener(listener, options) {
-
-	      if (!options) {
-	        options = {};
-	      }
-
-	      var _options = options;
-	      var keys = _options.keys;
-	      var areas = _options.areas;var newListener = undefined;
-
-	      if ('string' === typeof keys) {
-	        keys = [keys];
-	      }
-
-	      if ('string' === typeof areas) {
-	        areas = [areas];
-	      }
-
-	      newListener = function (changes, area) {
-	        if (Array.isArray(areas)) {
-	          if (areas.indexOf(area) < 0) {
-	            return;
-	          }
-	        }
-
-	        var keysIsArray = Array.isArray(keys),
-	            myChanges = {};
-
-	        for (var key in changes) {
-	          if (!keysIsArray || keys.indexOf(key) >= 0) {
-	            myChanges[key] = changes[key];
-	          }
-	        }
-
-	        for (var hasMyChange in myChanges) {
-	          listener(myChanges, area);
-	          break;
-	        }
-	      };
-	      changeCallbacks.push(newListener);
-	      return newListener;
-	    },
-
-	    /**
-	     * 删除一个监听函数
-	     * @param {Function} newListener
-	     */
-	    removeChangeListener: function removeChangeListener(newListener) {
-	      var index = changeCallbacks.indexOf(newListener);
-	      if (index >= 0) {
-	        changeCallbacks.splice(index, 1);
-	      }
-	    },
-
-	    /**
-	     * 在存储区域间同步数据
-	     * @param {String} [from]
-	     * @param {String} [to]
-	     * @returns {Promise}
-	     */
-	    sync: function sync() {
-	      var from = arguments.length <= 0 || arguments[0] === undefined ? 'local' : arguments[0];
-	      var to = arguments.length <= 1 || arguments[1] === undefined ? 'sync' : arguments[1];
-
-	      return Promise.all([module.getAll(from), module.clear(to)]).then(function (_ref) {
-	        var _ref2 = _slicedToArray(_ref, 1);
-
-	        var data = _ref2[0];
-	        return module.set(data, to);
-	      });
-	    }
-	  };
-
-	  storage.onChanged.addListener(function (changes, area) {
-	    var customChanges = {};
-
-	    for (var key in changes) {
-	      customChanges[key] = changes[key].newValue;
-	    }
-
-	    changeCallbacks.forEach(function (newListener) {
-	      newListener(customChanges, area);
-	    });
-	  });
-
-	  return module;
-
-	  /**
-	   * 获取默认的存储空间
-	   * @param {String} [area]
-	   * @returns {chrome.storage.StorageArea}
-	   */
-	  function getCurrentStorage(area) {
-	    var currentStorage = undefined;
-	    if (undefined === area) {
-	      currentStorage = defaultStorage;
-	    } else {
-	      noAreaError(area);
-	      currentStorage = storage[area];
-	    }
-	    return currentStorage;
-	  }
-
-	  /**
-	   * 如果没有指定的存储区域则报错
-	   * @param {String} area
-	   */
-	  function noAreaError(area) {
-	    if (!storage[area]) {
-	      throw new Error('chrome.storage 不支持 ' + area + ' 存储区域。');
-	    }
-	  }
-	});
-
-	//# sourceMappingURL=chrome-storage.js.map
-
-/***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _highlights_index = __webpack_require__(209);
-
-	var _highlights_index2 = _interopRequireDefault(_highlights_index);
-
-	var _searchbar = __webpack_require__(210);
-
-	var _searchbar2 = _interopRequireDefault(_searchbar);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var App = function (_Component) {
-	  _inherits(App, _Component);
-
-	  function App() {
-	    _classCallCheck(this, App);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
-
-	  _createClass(App, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Highlights'
-	        ),
-	        _react2.default.createElement(_searchbar2.default, null),
-	        _react2.default.createElement(_highlights_index2.default, null)
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react.Component);
-
-	exports.default = App;
-
-/***/ },
-/* 209 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(169);
-
-	var _index = __webpack_require__(206);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HighlightsIndex = function (_Component) {
-	  _inherits(HighlightsIndex, _Component);
-
-	  function HighlightsIndex() {
-	    _classCallCheck(this, HighlightsIndex);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HighlightsIndex).apply(this, arguments));
-	  }
-
-	  _createClass(HighlightsIndex, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.props.fetchHighlights();
-	    }
-	  }, {
-	    key: 'renderHighlights',
-	    value: function renderHighlights() {
-	      return this.props.activeHighlights.map(function (highlight) {
-	        return _react2.default.createElement(
-	          'li',
-	          { className: 'list-group-item', key: highlight._id },
-	          _react2.default.createElement(
-	            'h5',
-	            { className: 'highlight-title' },
-	            _react2.default.createElement(
-	              'a',
-	              { href: highlight.url },
-	              highlight.title
-	            ),
-	            ' ',
-	            _react2.default.createElement('i', { className: 'fa fa-trash pull-right' })
-	          ),
-	          _react2.default.createElement(
-	            'h6',
-	            { className: 'highlighted-text' },
-	            highlight.description
-	          )
-	        );
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      if (!this.props.activeHighlights) {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          'Loading...'
-	        );
-	      }
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'highlights-index' },
-	        _react2.default.createElement(
-	          'ul',
-	          { className: 'list-group' },
-	          this.renderHighlights()
-	        )
-	      );
-	    }
-	  }]);
-
-	  return HighlightsIndex;
-	}(_react.Component);
-
-	function mapStateToProps(state) {
-	  return { activeHighlights: state.highlights.active };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _index.fetchHighlights })(HighlightsIndex);
-
-/***/ },
-/* 210 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(169);
-
-	var _index = __webpack_require__(206);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SearchBar = function (_Component) {
-	  _inherits(SearchBar, _Component);
-
-	  function SearchBar(props) {
-	    _classCallCheck(this, SearchBar);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
-
-	    _this.state = { term: '' };
-
-	    _this.onInputChange = _this.onInputChange.bind(_this);
-	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(SearchBar, [{
-	    key: 'onInputChange',
-	    value: function onInputChange(event) {
-	      this.setState({ term: event.target.value });
-	      this.props.searchHighlights(event.target.value);
-	    }
-	  }, {
-	    key: 'onFormSubmit',
-	    value: function onFormSubmit(event) {
-	      event.preventDefault();
-
-	      this.props.searchHighlights(this.state.term);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.onFormSubmit, className: 'input-group input-group-sm' },
-	        _react2.default.createElement('input', {
-	          placeholder: 'Search through your highlights',
-	          className: 'form-control',
-	          value: this.state.term,
-	          onChange: this.onInputChange }),
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'input-group-btn' },
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-primary' },
-	            'Search'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SearchBar;
-	}(_react.Component);
-
-	exports.default = (0, _reactRedux.connect)(null, { searchHighlights: _index.searchHighlights })(SearchBar);
 
 /***/ }
 /******/ ]);

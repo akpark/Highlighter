@@ -28,17 +28,17 @@
   text-decoration: underline;
 }
 
-.highlights-index i {
+.trash {
   cursor: pointer;
   opacity: 0.5;
 }
 
-.highlights-index i:hover {
+.trash {
   opacity: 1;
 }
 
 .highlighted-text {
   border: 1px solid #ccc;
-  padding: 5px;
+  padding: 8px;
   border-radius: 5px;
 }

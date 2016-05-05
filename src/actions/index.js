@@ -14,17 +14,14 @@ export function fetchHighlights() {
 }
 
 export function deleteHighlight(id) {
-  // const request = chromeStorage.remove(...)
-
   return {
     type: DELETE_HIGHLIGHT,
-    payload: request
+    payload: id
   }
 }
 
 export function searchHighlights(term) {
-  // const request = chromeStorage.get("highlights", "local")
-
+  debugger
   return {
     type: SEARCH_HIGHLIGHTS,
     payload: term
