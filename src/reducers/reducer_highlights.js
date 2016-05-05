@@ -7,13 +7,12 @@ const INITIAL_STATE = { all: [], active: [] }
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case FETCH_HIGHLIGHTS:
-      return { all: action.payload.highlights }
+      return { all: action.payload.highlights, active: action.payload.highlights }
     case SEARCH_HIGHLIGHTS:
-      const highlights = action.payload.highlights;
-      const activeHighlights = _.filter(highlights, function(highlight) {
-        return _.includes(highlight, term);
-      })
-      return { active: activeHighlights }
+      const activeHighlights = _.filter(state.all, function(highlight) {
+        return _.includes(highlight.description, action.payload);
+      });
+      return { all: state.all, active: activeHighlights };
     default:
       return state;
   }

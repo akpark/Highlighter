@@ -8,10 +8,10 @@ class HighlightsIndex extends Component {
   }
 
   renderHighlights() {
-    return this.props.highlights.map((highlight) => {
+    return this.props.activeHighlights.map((highlight) => {
       return (
         <li className="list-group-item" key={highlight._id}>
-          <h5>{highlight.title} <i className="fa fa-trash pull-right"></i></h5>
+          <h5 className="highlight-title"><a href={highlight.url}>{highlight.title}</a> <i className="fa fa-trash pull-right"></i></h5>
           <h6 className="highlighted-text">{highlight.description}</h6>
         </li>
       );
@@ -19,7 +19,7 @@ class HighlightsIndex extends Component {
   }
 
   render() {
-    if (!this.props.highlights) {
+    if (!this.props.activeHighlights) {
       return <div>Loading...</div>;
     }
 
@@ -34,7 +34,7 @@ class HighlightsIndex extends Component {
 }
 
 function mapStateToProps(state) {
-  return { highlights: state.highlights.all }
+  return { activeHighlights: state.highlights.active }
 }
 
 export default connect(mapStateToProps, { fetchHighlights })(HighlightsIndex);

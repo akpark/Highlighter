@@ -7,16 +7,22 @@ class SearchBar extends Component {
     super(props);
     this.state = { term: '' };
 
-    this.onInputChange.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   onInputChange(event) {
-    this.setState({ term: event.target.value })
+    this.setState({ term: event.target.value });
+    this.props.searchHighlights(event.target.value);
+  }
+
+  onFormSubmit(event) {
+    event.preventDefault();
+
+    this.props.searchHighlights(this.state.term);
   }
 
   render() {
-
-
     return (
       <form onSubmit={this.onFormSubmit} className="input-group input-group-sm">
         <input
@@ -32,8 +38,4 @@ class SearchBar extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { activeHighlights: state.activeHighlights };
-}
-
-export default connect(mapStateToProps, { searchHighlights })(SearchBar);
+export default connect(null, { searchHighlights })(SearchBar);

@@ -1,3 +1,7 @@
+.container {
+  text-align: center;
+}
+
 .popup-container {
   text-align: center;
   width: 200px;
@@ -9,12 +13,19 @@
   margin: 20px 0;
 }
 
+.search-bar {
+}
+
 .all-highlights-link {
 
 }
 
 .highlights-index {
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+.highlight-title {
+  text-decoration: underline;
 }
 
 .highlights-index i {

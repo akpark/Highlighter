@@ -22719,13 +22719,12 @@
 
 	  switch (action.type) {
 	    case _index.FETCH_HIGHLIGHTS:
-	      return { all: action.payload.highlights };
+	      return { all: action.payload.highlights, active: action.payload.highlights };
 	    case _index.SEARCH_HIGHLIGHTS:
-	      var highlights = action.payload.highlights;
-	      var activeHighlights = _lodash2.default.filter(highlights, function (highlight) {
-	        return _lodash2.default.includes(highlight, term);
+	      var activeHighlights = _lodash2.default.filter(state.all, function (highlight) {
+	        return _lodash2.default.includes(highlight.description, action.payload);
 	      });
-	      return { active: activeHighlights };
+	      return { all: state.all, active: activeHighlights };
 	    default:
 	      return state;
 	  }
@@ -38947,21 +38946,6 @@
 	  };
 	}
 
-	// export function createHighlight(props) {
-	//   const highlight = {
-	//     _id: new Date().toISOString(),
-	//     title: props.title,
-	//     url: props.url,
-	//     description: props.description,
-	//     image_url: props.image_url
-	//   }
-	//
-	//   return {
-	//     type: CREATE_HIGHLIGHT,
-	//     payload: highlight
-	//   }
-	// }
-
 	function deleteHighlight(id) {
 	  // const request = chromeStorage.remove(...)
 
@@ -38972,11 +38956,11 @@
 	}
 
 	function searchHighlights(term) {
-	  var request = _chromeStorageWrapper2.default.get("highlights", "local");
+	  // const request = chromeStorage.get("highlights", "local")
 
 	  return {
 	    type: SEARCH_HIGHLIGHTS,
-	    payload: { request: request, term: term }
+	    payload: term
 	  };
 	}
 
@@ -39363,14 +39347,18 @@
 	  }, {
 	    key: 'renderHighlights',
 	    value: function renderHighlights() {
-	      return this.props.highlights.map(function (highlight) {
+	      return this.props.activeHighlights.map(function (highlight) {
 	        return _react2.default.createElement(
 	          'li',
 	          { className: 'list-group-item', key: highlight._id },
 	          _react2.default.createElement(
 	            'h5',
-	            null,
-	            highlight.title,
+	            { className: 'highlight-title' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: highlight.url },
+	              highlight.title
+	            ),
 	            ' ',
 	            _react2.default.createElement('i', { className: 'fa fa-trash pull-right' })
 	          ),
@@ -39385,7 +39373,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (!this.props.highlights) {
+	      if (!this.props.activeHighlights) {
 	        return _react2.default.createElement(
 	          'div',
 	          null,
@@ -39409,7 +39397,7 @@
 	}(_react.Component);
 
 	function mapStateToProps(state) {
-	  return { highlights: state.highlights.all };
+	  return { activeHighlights: state.highlights.active };
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _index.fetchHighlights })(HighlightsIndex);
@@ -39452,7 +39440,8 @@
 
 	    _this.state = { term: '' };
 
-	    _this.onInputChange.bind(_this);
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
 	    return _this;
 	  }
 
@@ -39460,11 +39449,18 @@
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      this.setState({ term: event.target.value });
+	      this.props.searchHighlights(event.target.value);
+	    }
+	  }, {
+	    key: 'onFormSubmit',
+	    value: function onFormSubmit(event) {
+	      event.preventDefault();
+
+	      this.props.searchHighlights(this.state.term);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-
 	      return _react2.default.createElement(
 	        'form',
 	        { onSubmit: this.onFormSubmit, className: 'input-group input-group-sm' },
@@ -39489,11 +39485,7 @@
 	  return SearchBar;
 	}(_react.Component);
 
-	function mapStateToProps(state) {
-	  return { activeHighlights: state.activeHighlights };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { searchHighlights: _index.searchHighlights })(SearchBar);
+	exports.default = (0, _reactRedux.connect)(null, { searchHighlights: _index.searchHighlights })(SearchBar);
 
 /***/ }
 /******/ ]);

@@ -13,21 +13,6 @@ export function fetchHighlights() {
   }
 }
 
-// export function createHighlight(props) {
-//   const highlight = {
-//     _id: new Date().toISOString(),
-//     title: props.title,
-//     url: props.url,
-//     description: props.description,
-//     image_url: props.image_url
-//   }
-//
-//   return {
-//     type: CREATE_HIGHLIGHT,
-//     payload: highlight
-//   }
-// }
-
 export function deleteHighlight(id) {
   // const request = chromeStorage.remove(...)
 
@@ -38,10 +23,10 @@ export function deleteHighlight(id) {
 }
 
 export function searchHighlights(term) {
-  const request = chromeStorage.get("highlights", "local")
+  // const request = chromeStorage.get("highlights", "local")
 
   return {
     type: SEARCH_HIGHLIGHTS,
-    payload: { request: request, term: term }
+    payload: term
   }
 }
