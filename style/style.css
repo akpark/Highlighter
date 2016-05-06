@@ -1,5 +1,10 @@
+.wrapper {
+  margin-top: 50px;
+}
+
 .container {
   text-align: center;
+  margin-top: 10px;
 }
 
 .popup-container {
@@ -13,7 +18,16 @@
   margin: 20px 0;
 }
 
-.search-bar {
+.side-menu {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.tag-index-item {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .all-highlights-link {
@@ -28,12 +42,12 @@
   text-decoration: underline;
 }
 
-.trash {
+.highlights-index i {
   cursor: pointer;
   opacity: 0.5;
 }
 
-.trash {
+.highlights-index i:hover {
   opacity: 1;
 }
 

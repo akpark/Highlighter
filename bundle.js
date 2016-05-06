@@ -22718,21 +22718,26 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
+
 	    case _index.FETCH_HIGHLIGHTS:
 	      return { all: action.payload.highlights, active: action.payload.highlights };
+
 	    case _index.SEARCH_HIGHLIGHTS:
 	      debugger;
 	      var activeHighlights = _lodash2.default.filter(state.all, function (highlight) {
 	        return _lodash2.default.includes(highlight.description, action.payload);
 	      });
 	      return { all: state.all, active: activeHighlights };
+
 	    case _index.DELETE_HIGHLIGHT:
+	      debugger;
 	      var newHighlights = _lodash2.default.filter(state.all, function (highlight) {
-	        return _lodash2.default.includes(highlight.id !== action.payload);
+	        return highlight._id !== action.payload;
 	      });
 	      chrome.storage.local.set({ "highlights": newHighlights });
 
 	      return { all: newHighlights, active: newHighlights };
+
 	    default:
 	      return state;
 	  }
@@ -22764,13 +22769,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _highlights_index = __webpack_require__(205);
+	var _wrapper = __webpack_require__(213);
 
-	var _highlights_index2 = _interopRequireDefault(_highlights_index);
-
-	var _searchbar = __webpack_require__(208);
-
-	var _searchbar2 = _interopRequireDefault(_searchbar);
+	var _wrapper2 = _interopRequireDefault(_wrapper);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22800,8 +22801,7 @@
 	          null,
 	          'Highlights'
 	        ),
-	        _react2.default.createElement(_searchbar2.default, null),
-	        _react2.default.createElement(_highlights_index2.default, null)
+	        _react2.default.createElement(_wrapper2.default, null)
 	      );
 	    }
 	  }]);
@@ -22879,14 +22879,16 @@
 	              { href: highlight.url },
 	              highlight.title
 	            ),
-	            _react2.default.createElement('span', { onClick: function onClick() {
+	            _react2.default.createElement('i', { onClick: function onClick() {
 	                return _this2.onDeleteHighlight(highlight._id);
 	              }, className: 'fa fa-trash pull-right trash' })
 	          ),
 	          _react2.default.createElement(
 	            'h6',
 	            { className: 'highlighted-text' },
-	            highlight.description
+	            '"',
+	            highlight.description,
+	            '"'
 	          )
 	        );
 	      });
@@ -22904,7 +22906,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'highlights-index' },
+	        { className: 'highlights-index col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right' },
 	        _react2.default.createElement(
 	          'ul',
 	          { className: 'list-group' },
@@ -23248,91 +23250,7 @@
 	//# sourceMappingURL=chrome-storage.js.map
 
 /***/ },
-/* 208 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(169);
-
-	var _index = __webpack_require__(206);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SearchBar = function (_Component) {
-	  _inherits(SearchBar, _Component);
-
-	  function SearchBar(props) {
-	    _classCallCheck(this, SearchBar);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
-
-	    _this.state = { term: '' };
-
-	    _this.onInputChange = _this.onInputChange.bind(_this);
-	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(SearchBar, [{
-	    key: 'onInputChange',
-	    value: function onInputChange(event) {
-	      this.setState({ term: event.target.value });
-	      this.props.searchHighlights(event.target.value);
-	    }
-	  }, {
-	    key: 'onFormSubmit',
-	    value: function onFormSubmit(event) {
-	      event.preventDefault();
-
-	      this.props.searchHighlights(this.state.term);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: this.onFormSubmit, className: 'input-group input-group-sm' },
-	        _react2.default.createElement('input', {
-	          placeholder: 'Search through your highlights',
-	          className: 'form-control',
-	          value: this.state.term,
-	          onChange: this.onInputChange }),
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'input-group-btn' },
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-primary' },
-	            'Search'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SearchBar;
-	}(_react.Component);
-
-	exports.default = (0, _reactRedux.connect)(null, { searchHighlights: _index.searchHighlights })(SearchBar);
-
-/***/ },
+/* 208 */,
 /* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -39503,6 +39421,212 @@
 		return module;
 	}
 
+
+/***/ },
+/* 211 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TagsIndex = function (_Component) {
+	  _inherits(TagsIndex, _Component);
+
+	  function TagsIndex() {
+	    _classCallCheck(this, TagsIndex);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TagsIndex).apply(this, arguments));
+	  }
+
+	  _createClass(TagsIndex, [{
+	    key: "componentWillMount",
+	    value: function componentWillMount() {}
+	  }, {
+	    key: "renderTags",
+	    value: function renderTags() {
+	      // fetch tags
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "side-menu-container col-xs-3 col-sm-3 col-md-3 col-lg-3 side-menu " },
+	        _react2.default.createElement(
+	          "nav",
+	          { className: "navbar navbar-default" },
+	          _react2.default.createElement(
+	            "h3",
+	            null,
+	            "Tags"
+	          ),
+	          _react2.default.createElement(
+	            "ul",
+	            { className: "nav navbar-nav nav-pills nav-stacked" },
+	            _react2.default.createElement(
+	              "li",
+	              { className: "tag-index-item" },
+	              "Recent"
+	            ),
+	            _react2.default.createElement(
+	              "li",
+	              { className: "tag-index-item" },
+	              "Tag 2"
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TagsIndex;
+	}(_react.Component);
+
+	exports.default = TagsIndex;
+
+/***/ },
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(169);
+
+	var _index = __webpack_require__(206);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SearchBar = function (_Component) {
+	  _inherits(SearchBar, _Component);
+
+	  function SearchBar(props) {
+	    _classCallCheck(this, SearchBar);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchBar).call(this, props));
+
+	    _this.state = { term: '' };
+
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(SearchBar, [{
+	    key: 'onInputChange',
+	    value: function onInputChange(event) {
+	      this.setState({ term: event.target.value });
+	      this.props.searchHighlights(event.target.value);
+	    }
+	  }, {
+	    key: 'onFormSubmit',
+	    value: function onFormSubmit(event) {
+	      event.preventDefault();
+
+	      this.props.searchHighlights(this.state.term);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'search-bar col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right' },
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.onFormSubmit, className: 'input-group input-group-sm' },
+	          _react2.default.createElement('input', {
+	            placeholder: 'Search through your highlights',
+	            className: 'form-control',
+	            value: this.state.term,
+	            onChange: this.onInputChange }),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'input-group-btn' },
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'btn btn-primary' },
+	              'Search'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SearchBar;
+	}(_react.Component);
+
+	exports.default = (0, _reactRedux.connect)(null, { searchHighlights: _index.searchHighlights })(SearchBar);
+
+/***/ },
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _highlights_index = __webpack_require__(205);
+
+	var _highlights_index2 = _interopRequireDefault(_highlights_index);
+
+	var _search_bar = __webpack_require__(212);
+
+	var _search_bar2 = _interopRequireDefault(_search_bar);
+
+	var _tags_index = __webpack_require__(211);
+
+	var _tags_index2 = _interopRequireDefault(_tags_index);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'wrapper' },
+	    _react2.default.createElement(_tags_index2.default, null),
+	    _react2.default.createElement(_search_bar2.default, null),
+	    _react2.default.createElement(_highlights_index2.default, null)
+	  );
+	};
 
 /***/ }
 /******/ ]);

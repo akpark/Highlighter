@@ -24,9 +24,9 @@ class HighlightsIndex extends Component {
         <li className="list-group-item" key={highlight._id}>
           <h5 className="highlight-title">
             <a href={highlight.url}>{highlight.title}</a>
-              <span onClick={() => this.onDeleteHighlight(highlight._id)} className="fa fa-trash pull-right trash"></span>
+              <i onClick={() => this.onDeleteHighlight(highlight._id)} className="fa fa-trash pull-right trash"></i>
           </h5>
-          <h6 className="highlighted-text">{highlight.description}</h6>
+          <h6 className="highlighted-text">"{highlight.description}"</h6>
         </li>
       );
     });
@@ -38,7 +38,7 @@ class HighlightsIndex extends Component {
     }
 
     return (
-      <div className="highlights-index">
+      <div className="highlights-index col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right">
         <ul className="list-group">
           {this.renderHighlights()}
         </ul>
