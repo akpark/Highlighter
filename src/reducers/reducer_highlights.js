@@ -1,6 +1,5 @@
 import _ from 'lodash';
-
-import { DELETE_HIGHLIGHT, FETCH_HIGHLIGHTS, SEARCH_HIGHLIGHTS } from '../actions/index';
+import { DELETE_HIGHLIGHT, FETCH_HIGHLIGHTS, SEARCH_HIGHLIGHTS } from '../constants/constants';
 
 const INITIAL_STATE = { all: [], active: [] }
 

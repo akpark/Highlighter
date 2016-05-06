@@ -6,7 +6,9 @@ class TagsIndex extends Component {
   }
 
   renderTags() {
-    // fetch tags
+    return this.props.tags.map((tag) => {
+      return <li className="tag-index-item">{tag.title}</li>;
+    })
   }
 
   render() {
@@ -15,8 +17,7 @@ class TagsIndex extends Component {
         <nav className="navbar navbar-default">
           <h3>Tags</h3>
           <ul className="nav navbar-nav nav-pills nav-stacked" >
-            <li className="tag-index-item">Recent</li>
-            <li className="tag-index-item">Tag 2</li>
+            {this.renderTags()}
           </ul>
         </nav>
       </div>
@@ -24,4 +25,4 @@ class TagsIndex extends Component {
   }
 }
 
-export default TagsIndex
+export default TagsIndex;

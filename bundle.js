@@ -22695,10 +22695,15 @@
 
 	var _reducer_highlights2 = _interopRequireDefault(_reducer_highlights);
 
+	var _reducer_tags = __webpack_require__(215);
+
+	var _reducer_tags2 = _interopRequireDefault(_reducer_tags);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	  highlights: _reducer_highlights2.default
+	  highlights: _reducer_highlights2.default,
+	  tags: _reducer_tags2.default
 	});
 
 	exports.default = rootReducer;
@@ -22719,17 +22724,17 @@
 
 	  switch (action.type) {
 
-	    case _index.FETCH_HIGHLIGHTS:
+	    case _constants.FETCH_HIGHLIGHTS:
 	      return { all: action.payload.highlights, active: action.payload.highlights };
 
-	    case _index.SEARCH_HIGHLIGHTS:
+	    case _constants.SEARCH_HIGHLIGHTS:
 	      debugger;
 	      var activeHighlights = _lodash2.default.filter(state.all, function (highlight) {
 	        return _lodash2.default.includes(highlight.description, action.payload);
 	      });
 	      return { all: state.all, active: activeHighlights };
 
-	    case _index.DELETE_HIGHLIGHT:
+	    case _constants.DELETE_HIGHLIGHT:
 	      debugger;
 	      var newHighlights = _lodash2.default.filter(state.all, function (highlight) {
 	        return highlight._id !== action.payload;
@@ -22747,7 +22752,7 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _index = __webpack_require__(206);
+	var _constants = __webpack_require__(216);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22797,9 +22802,13 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Highlights'
+	          'div',
+	          { className: 'page-header' },
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Highlights'
+	          )
 	        ),
 	        _react2.default.createElement(_wrapper2.default, null)
 	      );
@@ -22830,6 +22839,10 @@
 	var _reactRedux = __webpack_require__(169);
 
 	var _index = __webpack_require__(206);
+
+	var _highlight_index_item = __webpack_require__(214);
+
+	var _highlight_index_item2 = _interopRequireDefault(_highlight_index_item);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22865,32 +22878,8 @@
 	  }, {
 	    key: 'renderHighlights',
 	    value: function renderHighlights() {
-	      var _this2 = this;
-
 	      return this.props.activeHighlights.map(function (highlight) {
-	        return _react2.default.createElement(
-	          'li',
-	          { className: 'list-group-item', key: highlight._id },
-	          _react2.default.createElement(
-	            'h5',
-	            { className: 'highlight-title' },
-	            _react2.default.createElement(
-	              'a',
-	              { href: highlight.url },
-	              highlight.title
-	            ),
-	            _react2.default.createElement('i', { onClick: function onClick() {
-	                return _this2.onDeleteHighlight(highlight._id);
-	              }, className: 'fa fa-trash pull-right trash' })
-	          ),
-	          _react2.default.createElement(
-	            'h6',
-	            { className: 'highlighted-text' },
-	            '"',
-	            highlight.description,
-	            '"'
-	          )
-	        );
+	        return _react2.default.createElement(_highlight_index_item2.default, { key: highlight._id, highlight: highlight });
 	      });
 	    }
 	  }, {
@@ -22934,10 +22923,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.SEARCH_HIGHLIGHTS = exports.DELETE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = exports.FETCH_HIGHLIGHTS = undefined;
+	exports.FETCH_TAGS = exports.SEARCH_HIGHLIGHTS = exports.DELETE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = exports.FETCH_HIGHLIGHTS = undefined;
 	exports.fetchHighlights = fetchHighlights;
 	exports.deleteHighlight = deleteHighlight;
 	exports.searchHighlights = searchHighlights;
+	exports.fetchTags = fetchTags;
 
 	var _chromeStorageWrapper = __webpack_require__(207);
 
@@ -22949,6 +22939,8 @@
 	var CREATE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
 	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
 	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
+
+	var FETCH_TAGS = exports.FETCH_TAGS = 'FETCH_TAGS';
 
 	function fetchHighlights() {
 	  var request = _chromeStorageWrapper2.default.get("highlights", "local");
@@ -22971,6 +22963,15 @@
 	  return {
 	    type: SEARCH_HIGHLIGHTS,
 	    payload: term
+	  };
+	}
+
+	function fetchTags() {
+	  var request = _chromeStorageWrapper2.default.get("tags", "local");
+
+	  return {
+	    type: FETCH_TAGS,
+	    payload: request
 	  };
 	}
 
@@ -39461,7 +39462,13 @@
 	  }, {
 	    key: "renderTags",
 	    value: function renderTags() {
-	      // fetch tags
+	      return this.props.tags.map(function (tag) {
+	        return _react2.default.createElement(
+	          "li",
+	          { className: "tag-index-item" },
+	          tag.title
+	        );
+	      });
 	    }
 	  }, {
 	    key: "render",
@@ -39480,16 +39487,7 @@
 	          _react2.default.createElement(
 	            "ul",
 	            { className: "nav navbar-nav nav-pills nav-stacked" },
-	            _react2.default.createElement(
-	              "li",
-	              { className: "tag-index-item" },
-	              "Recent"
-	            ),
-	            _react2.default.createElement(
-	              "li",
-	              { className: "tag-index-item" },
-	              "Tag 2"
-	            )
+	            this.renderTags()
 	          )
 	        )
 	      );
@@ -39600,9 +39598,13 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(169);
 
 	var _highlights_index = __webpack_require__(205);
 
@@ -39616,17 +39618,150 @@
 
 	var _tags_index2 = _interopRequireDefault(_tags_index);
 
+	var _index = __webpack_require__(206);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function (props) {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Wrapper = function (_Component) {
+	  _inherits(Wrapper, _Component);
+
+	  function Wrapper() {
+	    _classCallCheck(this, Wrapper);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Wrapper).apply(this, arguments));
+	  }
+
+	  _createClass(Wrapper, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.fetchTags();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'wrapper' },
+	        _react2.default.createElement(_tags_index2.default, { tags: this.props.tags }),
+	        _react2.default.createElement(_search_bar2.default, null),
+	        _react2.default.createElement(_highlights_index2.default, { tags: this.props.tags })
+	      );
+	    }
+	  }]);
+
+	  return Wrapper;
+	}(_react.Component);
+
+	exports.default = Wrapper;
+
+
+	function mapStateToProps(state) {
+	  return { tags: state.tags };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchTags: _index.fetchTags })(Wrapper);
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	  var highlight = _ref.highlight;
+
 	  return _react2.default.createElement(
-	    'div',
-	    { className: 'wrapper' },
-	    _react2.default.createElement(_tags_index2.default, null),
-	    _react2.default.createElement(_search_bar2.default, null),
-	    _react2.default.createElement(_highlights_index2.default, null)
+	    "li",
+	    { className: "list-group-item" },
+	    _react2.default.createElement(
+	      "div",
+	      { className: "dropdown" },
+	      _react2.default.createElement(
+	        "button",
+	        { className: "btn btn-info btn-sm dropdown-toggle pull-left", type: "button", id: "dropdownMenu1",
+	          "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "true" },
+	        _react2.default.createElement("span", { className: "caret" })
+	      )
+	    ),
+	    _react2.default.createElement(
+	      "h5",
+	      { className: "highlight-title" },
+	      _react2.default.createElement(
+	        "a",
+	        { href: highlight.url },
+	        highlight.title
+	      ),
+	      _react2.default.createElement("i", { onClick: function onClick() {
+	          return undefined.onDeleteHighlight(highlight._id);
+	        }, className: "fa fa-trash pull-right trash" })
+	    ),
+	    _react2.default.createElement(
+	      "h6",
+	      { className: "highlighted-text" },
+	      "\"",
+	      highlight.description,
+	      "\""
+	    )
 	  );
 	};
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _constants.FETCH_TAGS:
+	      return [action.payload.tags].concat(_toConsumableArray(state));
+
+	    default:
+	      return state;
+	  }
+	};
+
+	var _constants = __webpack_require__(216);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var FETCH_HIGHLIGHTS = exports.FETCH_HIGHLIGHTS = 'FETCH_HIGHLIGHTS';
+	var CREATE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
+	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
+	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
+	var FETCH_TAGS = exports.FETCH_TAGS = 'FETCH_TAGS';
 
 /***/ }
 /******/ ]);

@@ -1,10 +1,5 @@
 import chromeStorage from 'chrome-storage-wrapper';
-export const FETCH_HIGHLIGHTS = 'FETCH_HIGHLIGHTS';
-export const CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
-export const DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
-export const SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
-
-export const FETCH_TAGS = 'FETCH_TAGS';
+import { FETCH_HIGHLIGHTS, CREATE_HIGHLIGHT, DELETE_HIGHLIGHT, SEARCH_HIGHLIGHTS } from '../constants/constants';
 
 export function fetchHighlights() {
   const request = chromeStorage.get("highlights", "local");
@@ -23,18 +18,8 @@ export function deleteHighlight(id) {
 }
 
 export function searchHighlights(term) {
-  debugger
   return {
     type: SEARCH_HIGHLIGHTS,
     payload: term
-  }
-}
-
-export function fetchTags() {
-  const request = chromeStorage.get("tags", "local");
-
-  return {
-    type: FETCH_TAGS,
-    payload: request
   }
 }
