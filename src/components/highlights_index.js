@@ -15,13 +15,12 @@ class HighlightsIndex extends Component {
   }
 
   onDeleteHighlight(id) {
-    debugger
     this.props.deleteHighlight(id);
   }
 
   renderHighlights() {
     return this.props.activeHighlights.map((highlight) => {
-      return <HighlightIndexItem key={highlight._id} highlight={highlight} />;
+      return <HighlightIndexItem key={highlight._id} tags={this.props.tags} highlight={highlight} />;
     });
   }
 

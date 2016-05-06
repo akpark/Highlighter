@@ -5,9 +5,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <div className="page-header">
-          <h1>Highlights</h1>
-        </div>
+        <h1 className="page-header">Highlights</h1>
         <Wrapper />
       </div>
     );

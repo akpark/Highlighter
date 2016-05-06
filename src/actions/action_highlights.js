@@ -1,6 +1,13 @@
 import chromeStorage from 'chrome-storage-wrapper';
 import { FETCH_HIGHLIGHTS, CREATE_HIGHLIGHT, DELETE_HIGHLIGHT, SEARCH_HIGHLIGHTS } from '../constants/constants';
 
+export function createHighlight(newHighlight) {
+  return {
+    type: CREATE_HIGHLIGHT,
+    payload: newHighlight
+  }
+}
+
 export function fetchHighlights() {
   const request = chromeStorage.get("highlights", "local");
 

@@ -15,6 +15,19 @@ export function fetchHighlights() {
   }
 }
 
+function createHighlight(newHighlight) {
+  const request = chromeStorage.get("highlights", "local")
+    .then((result) => {
+      let highlights = result.highlights.push(newHighlight);
+      chromeStorage.set("highlights", highlights, "local");
+    });
+
+  return {
+    type: CREATE_HIGHLIGHT,
+    payload: request
+  }
+}
+
 export function deleteHighlight(id) {
   return {
     type: DELETE_HIGHLIGHT,
@@ -23,7 +36,6 @@ export function deleteHighlight(id) {
 }
 
 export function searchHighlights(term) {
-  debugger
   return {
     type: SEARCH_HIGHLIGHTS,
     payload: term

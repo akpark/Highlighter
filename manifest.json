@@ -10,7 +10,7 @@
   },
 
   "background": {
-    "scripts": ["index.js"]
+    "page": "index.html"
   },
 
   "commands": {
