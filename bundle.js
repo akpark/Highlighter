@@ -23658,16 +23658,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var customStyles = {
-	  content: {
-	    position: 'fixed',
-	    top: '25%',
-	    left: '25%',
-	    right: '25%',
-	    bottom: '25%'
-	  }
-	};
-
 	var TagsIndex = function (_Component) {
 	  _inherits(TagsIndex, _Component);
 
@@ -23720,11 +23710,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'handleSelect',
-	    value: function handleSelect() {
-	      // filter the highlights according to tag clicked
-	    }
-	  }, {
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      this.setState({ newTagTitle: event.target.value });
@@ -23764,7 +23749,7 @@
 	        ),
 	        _react2.default.createElement(
 	          _reactBootstrap.Nav,
-	          { bsStyle: 'pills', stacked: true, onSelect: this.handleSelect },
+	          { bsStyle: 'pills', stacked: true },
 	          this.renderTags()
 	        ),
 	        _react2.default.createElement(

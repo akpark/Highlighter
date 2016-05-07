@@ -4,16 +4,6 @@ import { createTag } from '../actions/action_tags';
 import { filterHighlights } from '../actions/action_highlights';
 import { Nav, NavItem, Modal, Button, FormGroup, FormControl, MenuItem } from 'react-bootstrap';
 
-const customStyles = {
-  content: {
-    position: 'fixed',
-    top: '25%',
-    left: '25%',
-    right: '25%',
-    bottom: '25%'
-  }
-}
-
 class TagsIndex extends Component {
   constructor(props) {
     super(props);
@@ -48,10 +38,6 @@ class TagsIndex extends Component {
     })
   }
 
-  handleSelect() {
-    // filter the highlights according to tag clicked
-  }
-
   onInputChange(event) {
     this.setState({ newTagTitle: event.target.value });
   }
@@ -76,7 +62,7 @@ class TagsIndex extends Component {
           <h3 className="">Tags</h3>
         </div>
 
-        <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
+        <Nav bsStyle="pills" stacked>
           {this.renderTags()}
         </Nav>
 

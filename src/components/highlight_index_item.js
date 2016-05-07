@@ -36,4 +36,4 @@ class HighlightIndexItem extends Component {
   }
 }
 
-export default connect(null, { editHighlight})(HighlightIndexItem);
+export default connect(null, { editHighlight })(HighlightIndexItem);
