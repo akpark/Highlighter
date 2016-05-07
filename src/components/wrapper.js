@@ -22,7 +22,7 @@ export default class Wrapper extends Component {
 }
 
 function mapStateToProps(state) {
-  return { tags: state.tags };
+  return { tags: state.tags.all };
 }
 
 export default connect(mapStateToProps, { fetchTags })(Wrapper);

@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { editHighlight } from '../actions/action_highlights';
+import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 class HighlightIndexItem extends Component {
+  handleTagClick(event) {
+    this.props.editHighlight(this.props.highlight._id, event.target.value, this.props.params.tag_name);
+  }
+
   renderTags() {
-    return this.props.tags.map((tag) => {
-      return <li key={tag._id}><a href="#">{tag.title}</a></li>;
+    return this.props.tags.map((tag, key) => {
+      return <MenuItem onClick={this.handleTagClick.bind(this)} value={tag.title} key={key}>{tag.title}</MenuItem>;
     });
   }
 
@@ -12,22 +19,21 @@ class HighlightIndexItem extends Component {
 
     return (
       <li className="list-group-item">
-        <div className="dropdown">
-          <button className="btn btn-sm dropdown-toggle pull-left" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true"><span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu">
-            {this.renderTags()}
-          </ul>
+        <div className="list-group-header">
+          <ButtonToolbar className="pull-left highlight-index-item-tag">
+            <DropdownButton id="dropdown" bsSize="small" title="Tags">
+              {this.renderTags()}
+            </DropdownButton>
+          </ButtonToolbar>
+          <h6 className="highlight-title">
+            <a href={highlight.url}>{highlight.title}</a>
+              <i onClick={() => this.onDeleteHighlight(highlight._id)} className="fa fa-trash pull-right trash"></i>
+          </h6>
         </div>
-        <h5 className="highlight-title">
-          <a href={highlight.url}>{highlight.title}</a>
-            <i onClick={() => this.onDeleteHighlight(highlight._id)} className="fa fa-trash pull-right trash"></i>
-        </h5>
         <h6 className="highlighted-text">"{highlight.description}"</h6>
       </li>
     );
   }
 }
 
-export default HighlightIndexItem;
+export default connect(null, { editHighlight})(HighlightIndexItem);

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createTag } from '../actions/action_tags';
-import Modal from 'react-modal';
+import { filterHighlights } from '../actions/action_highlights';
+import { Nav, NavItem, Modal, Button, FormGroup, FormControl, MenuItem } from 'react-bootstrap';
 
 const customStyles = {
   content: {
@@ -18,68 +19,89 @@ class TagsIndex extends Component {
     super(props);
 
     this.state = {
-      modalIsOpen: false,
+      showModal: false,
       newTagTitle: ''
     }
+
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.onNewTagSubmit = this.onNewTagSubmit.bind(this);
+    this.onClickHighlight = this.onClickHighlight.bind(this);
   }
 
   openModal() {
-    this.setState({modalIsOpen: true});
+    this.setState({showModal: true});
   }
 
   closeModal() {
-    this.setState({modalIsOpen: false});
+    this.setState({showModal: false});
+  }
+
+  onClickHighlight(tag_title) {
+    this.props.filterHighlights(tag_title)
   }
 
   renderTags() {
-    return this.props.tags.map((tag) => {
-      return <li key={tag._id} className="tag-index-item">{tag.title}</li>;
+    return this.props.tags.map((tag, key) => {
+      return <NavItem key={key}>{tag.title}</NavItem>;
     })
+  }
+
+  handleSelect() {
+    // filter the highlights according to tag clicked
   }
 
   onInputChange(event) {
     this.setState({ newTagTitle: event.target.value });
   }
 
-  onFormSubmit(event) {
+  onNewTagSubmit() {
     if (this.state.newTagTitle) {
       this.props.createTag(this.state.newTagTitle);
+      this.closeModal();
     }
   }
 
   render() {
     return (
       <div className="side-menu-container col-xs-3 col-sm-3 col-md-3 col-lg-3 side-menu ">
-        <button type="button" className="" onClick={this.openModal}><i className="fa fa-plus-square-o"></i></button>
-        <nav className="navbar navbar-default">
-          <h3>Tags</h3>
-          <ul className="nav navbar-nav nav-pills nav-stacked" >
-            {this.renderTags()}
-          </ul>
-        </nav>
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          style={customStyles}>
+        <div className="side-menu-header">
+          <Button
+            className="pull-right"
+            bsStyle="default"
+            bsSize="small"
+            onClick={this.openModal}
+            ><i className="fa fa-plus-square-o"></i></Button>
+          <h3 className="">Tags</h3>
+        </div>
 
-          <form onSubmit={this.onFormSubmit} className="input-group">
-            <input
-              placeholder="New Tag Name"
-              className="form-control"
-              value={this.state.newTagTitle}
-              onChange={this.onInputChange}/>
-            <span className="input-group-btn">
-              <button className="btn btn-default">Create</button>
-            </span>
-          </form>
+        <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
+          {this.renderTags()}
+        </Nav>
+
+        <Modal
+          show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>New Tag Name</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FormGroup>
+              <FormControl
+                type="text"
+                value={this.state.newTagTitle}
+                onChange={this.onInputChange}>
+              </FormControl>
+            </FormGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.onNewTagSubmit}>Create</Button>
+            <Button onClick={this.closeModal}>Close</Button>
+          </Modal.Footer>
         </Modal>
     </div>
     )
   }
 }
 
-export default connect(null, {createTag})(TagsIndex);
+export default connect(null, { createTag, filterHighlights })(TagsIndex);
