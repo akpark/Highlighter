@@ -39,12 +39,12 @@ class TagsIndex extends Component {
   }
 
   onClickHighlight(tag_title) {
-    this.props.filterHighlights(tag_title)
+    this.props.filterHighlights(tag_title);
   }
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
-      return <NavItem key={key}>{tag.title}</NavItem>;
+      return <NavItem onClick={() => {this.onClickHighlight(tag.title)}} key={key}>{tag.title}</NavItem>;
     })
   }
 

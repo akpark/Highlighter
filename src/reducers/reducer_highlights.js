@@ -29,18 +29,6 @@ export default function(state = INITIAL_STATE, action) {
         return highlight.tag_name === action.payload.currentTag;
       })
 
-      // let list = Immutable.List.of(state.all);
-      //
-      // debugger
-      // const editedList = list.update(
-      //   list.findIndex(function (item) {
-      //     debugger
-      //     return item._id === action.payload._id;
-      //   }), function (item) {
-      //     debugger
-      //     return item.setIn(item.tag_id, action.payload.newTag);
-      //   }
-      // )
       return { all: editedList, active: state.active };
 
     case SEARCH_HIGHLIGHTS:
@@ -50,8 +38,9 @@ export default function(state = INITIAL_STATE, action) {
       return { all: state.all, active: activeHighlights };
 
     case FILTER_HIGHLIGHTS:
+      debugger
       const filteredHighlights = _.filter(state.all, ((highlight) => {
-        return highlight.tag === action.payload;
+        return highlight.tag_id === action.payload;
       }));
       return { all: state.all, active: filteredHighlights };
 

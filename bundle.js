@@ -22746,18 +22746,6 @@
 	        return highlight.tag_name === action.payload.currentTag;
 	      });
 
-	      // let list = Immutable.List.of(state.all);
-	      //
-	      // debugger
-	      // const editedList = list.update(
-	      //   list.findIndex(function (item) {
-	      //     debugger
-	      //     return item._id === action.payload._id;
-	      //   }), function (item) {
-	      //     debugger
-	      //     return item.setIn(item.tag_id, action.payload.newTag);
-	      //   }
-	      // )
 	      return { all: editedList, active: state.active };
 
 	    case _constants.SEARCH_HIGHLIGHTS:
@@ -22767,8 +22755,9 @@
 	      return { all: state.all, active: activeHighlights };
 
 	    case _constants.FILTER_HIGHLIGHTS:
+	      debugger;
 	      var filteredHighlights = _lodash2.default.filter(state.all, function (highlight) {
-	        return highlight.tag === action.payload;
+	        return highlight.tag_id === action.payload;
 	      });
 	      return { all: state.all, active: filteredHighlights };
 
@@ -23718,10 +23707,14 @@
 	  }, {
 	    key: 'renderTags',
 	    value: function renderTags() {
+	      var _this2 = this;
+
 	      return this.props.tags.map(function (tag, key) {
 	        return _react2.default.createElement(
 	          _reactBootstrap.NavItem,
-	          { key: key },
+	          { onClick: function onClick() {
+	              _this2.onClickHighlight(tag.title);
+	            }, key: key },
 	          tag.title
 	        );
 	      });
