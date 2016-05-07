@@ -20,7 +20,9 @@ class HighlightsIndex extends Component {
 
   renderHighlights() {
     return this.props.activeHighlights.map((highlight) => {
-      return <HighlightIndexItem key={highlight._id} tags={this.props.tags} highlight={highlight} />;
+      if (highlight.tag_id === this.props.activeTag) {
+        return <HighlightIndexItem key={highlight._id} tags={this.props.tags} highlight={highlight} />;
+      }
     });
   }
 
@@ -40,7 +42,10 @@ class HighlightsIndex extends Component {
 }
 
 function mapStateToProps(state) {
-  return { activeHighlights: state.highlights.active }
+  return {
+    activeHighlights: state.highlights.active,
+    activeTag: state.tags.active
+  };
 }
 
 export default connect(mapStateToProps, { fetchHighlights, deleteHighlight })(HighlightsIndex);

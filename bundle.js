@@ -23053,7 +23053,9 @@
 	      var _this2 = this;
 
 	      return this.props.activeHighlights.map(function (highlight) {
-	        return _react2.default.createElement(_highlight_index_item2.default, { key: highlight._id, tags: _this2.props.tags, highlight: highlight });
+	        if (highlight.tag_id === _this2.props.activeTag) {
+	          return _react2.default.createElement(_highlight_index_item2.default, { key: highlight._id, tags: _this2.props.tags, highlight: highlight });
+	        }
 	      });
 	    }
 	  }, {
@@ -23083,7 +23085,10 @@
 	}(_react.Component);
 
 	function mapStateToProps(state) {
-	  return { activeHighlights: state.highlights.active };
+	  return {
+	    activeHighlights: state.highlights.active,
+	    activeTag: state.tags.active
+	  };
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _index.fetchHighlights, deleteHighlight: _index.deleteHighlight })(HighlightsIndex);
@@ -23477,7 +23482,7 @@
 	  _createClass(HighlightIndexItem, [{
 	    key: 'handleTagClick',
 	    value: function handleTagClick(event) {
-	      this.props.editHighlight(this.props.highlight._id, event.target.value, this.props.params.tag_name);
+	      this.props.editHighlight(this.props.highlight._id, event.target.value);
 	    }
 	  }, {
 	    key: 'renderTags',
