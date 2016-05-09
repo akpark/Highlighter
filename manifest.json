@@ -6,25 +6,31 @@
   "version": "1.0",
 
   "browser_action": {
-    "default_title": "Highlighter"
+    "default_title": "Highlighter",
+    "default_icon": "highlight.png"
   },
 
   "background": {
-    "page": "index.html"
+    "scripts": ["index.js"]
   },
 
   "commands": {
     "save-highlight": {
       "suggested_key": {
-        "default": "Ctrl+Shift+7"
+        "default": "Ctrl+Shift+H"
       },
       "description": "Save selected text"
     }
   },
 
+  "icons": {
+    "16": "highlight.png"
+  },
+
   "permissions": [
     "storage",
     "activeTab",
-    "tabs"
+    "tabs",
+    "contextMenus"
   ]
 }

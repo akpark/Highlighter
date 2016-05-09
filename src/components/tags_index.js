@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createTag, setActiveTag } from '../actions/action_tags';
-import { filterHighlights } from '../actions/action_highlights';
+import { filterHighlights, fetchHighlights } from '../actions/action_highlights';
 import { Nav, NavItem, Modal, Button, FormGroup, FormControl, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -30,8 +30,12 @@ class TagsIndex extends Component {
   }
 
   onClickHighlight(tag_title) {
-    this.props.setActiveTag(tag_title);
-    this.props.filterHighlights(tag_title);
+    if (tag_title === "all") {
+      this.props.setActiveTag("all");
+    } else {
+      this.props.setActiveTag(tag_title);
+      this.props.filterHighlights(tag_title);
+    }
   }
 
   renderTags() {
@@ -74,6 +78,10 @@ class TagsIndex extends Component {
         </div>
 
         <Nav bsStyle="pills" stacked>
+          <div className={(this.props.activeTag === "all") ? "tag-item active-tag-item" : "tag-item"}
+            onClick={() => {this.onClickHighlight("all")}}>
+            <NavItem>All</NavItem>
+          </div>
           {this.renderTags()}
         </Nav>
 
@@ -108,4 +116,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { createTag, setActiveTag, filterHighlights })(TagsIndex);
+export default connect(mapStateToProps, { createTag, setActiveTag, filterHighlights, fetchHighlights })(TagsIndex);

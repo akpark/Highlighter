@@ -20,17 +20,13 @@ class HighlightsIndex extends Component {
 
   renderHighlights() {
     return this.props.activeHighlights.map((highlight) => {
-      if (highlight.tag_id === this.props.activeTag) {
+      if (this.props.activeTag === "all" || highlight.tag_id === this.props.activeTag) {
         return <HighlightIndexItem key={highlight._id} tags={this.props.tags} highlight={highlight} />;
       }
     });
   }
 
   render() {
-    // if (!this.props.activeHighlights) {
-    //   return <div>Loading...</div>;
-    // }
-
     return (
       <div className="highlights-index col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right">
         <ul className="list-group">
@@ -43,7 +39,7 @@ class HighlightsIndex extends Component {
 
 function mapStateToProps(state) {
   return {
-    activeHighlights: state.highlights.active,
+    activeHighlights: state.highlights.all,
     activeTag: state.tags.active
   };
 }

@@ -44483,7 +44483,7 @@
 	      var _this2 = this;
 
 	      return this.props.activeHighlights.map(function (highlight) {
-	        if (highlight.tag_id === _this2.props.activeTag) {
+	        if (_this2.props.activeTag === "all" || highlight.tag_id === _this2.props.activeTag) {
 	          return _react2.default.createElement(_highlight_index_item2.default, { key: highlight._id, tags: _this2.props.tags, highlight: highlight });
 	        }
 	      });
@@ -44491,10 +44491,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      // if (!this.props.activeHighlights) {
-	      //   return <div>Loading...</div>;
-	      // }
-
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'highlights-index col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right' },
@@ -44512,7 +44508,7 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    activeHighlights: state.highlights.active,
+	    activeHighlights: state.highlights.all,
 	    activeTag: state.tags.active
 	  };
 	}
@@ -64069,8 +64065,12 @@
 	  }, {
 	    key: 'onClickHighlight',
 	    value: function onClickHighlight(tag_title) {
-	      this.props.setActiveTag(tag_title);
-	      this.props.filterHighlights(tag_title);
+	      if (tag_title === "all") {
+	        this.props.setActiveTag("all");
+	      } else {
+	        this.props.setActiveTag(tag_title);
+	        this.props.filterHighlights(tag_title);
+	      }
 	    }
 	  }, {
 	    key: 'renderTags',
@@ -64110,6 +64110,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'side-menu-container col-xs-3 col-sm-3 col-md-3 col-lg-3 side-menu ' },
@@ -64135,6 +64137,18 @@
 	        _react2.default.createElement(
 	          _reactBootstrap.Nav,
 	          { bsStyle: 'pills', stacked: true },
+	          _react2.default.createElement(
+	            'div',
+	            { className: this.props.activeTag === "all" ? "tag-item active-tag-item" : "tag-item",
+	              onClick: function onClick() {
+	                _this3.onClickHighlight("all");
+	              } },
+	            _react2.default.createElement(
+	              _reactBootstrap.NavItem,
+	              null,
+	              'All'
+	            )
+	          ),
 	          this.renderTags()
 	        ),
 	        _react2.default.createElement(
@@ -64191,7 +64205,7 @@
 	  };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { createTag: _action_tags.createTag, setActiveTag: _action_tags.setActiveTag, filterHighlights: _action_highlights.filterHighlights })(TagsIndex);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { createTag: _action_tags.createTag, setActiveTag: _action_tags.setActiveTag, filterHighlights: _action_highlights.filterHighlights, fetchHighlights: _action_highlights.fetchHighlights })(TagsIndex);
 
 /***/ },
 /* 483 */

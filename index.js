@@ -31,9 +31,6 @@ function saveHighlight() {
           title: 'recent'
         }
 
-        // createHighlight(newHighlight);
-        // createTag(newTag);
-
         highlights.push(newHighlight);
         chrome.storage.local.set({"highlights": highlights})
 
@@ -47,16 +44,12 @@ function saveHighlight() {
   })
 }
 
-function createHighlight(highlight) {
-  // chrome.storage.local.set({"highlights": highlights});
-}
-
-function createTag(tag) {
-  // chrome.storage.local.set({"tags": highlights});
-}
-
 chrome.browserAction.onClicked.addListener((activeTab) => {
   chrome.tabs.create({ url: "./index.html" });
 });
 
-// first find a way to save a tag to chrome storage
+chrome.contextMenus.create({
+  title: "highlight",
+  contexts: ["selection"],
+  onclick: saveHighlight
+});
