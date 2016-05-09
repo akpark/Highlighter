@@ -40,7 +40,6 @@
 
 .tag-item {
   border-top: 1px solid #eee;
-  /*border-bottom: 1px solid #eee;*/
   padding: 5px;
   cursor: pointer;
   border-radius: 5px;
@@ -50,16 +49,26 @@
   background-color: #eee;
 }
 
-.all-highlights-link {
-
-}
-
 .highlights-index {
   margin-top: 20px;
 }
 
 .highlight-title {
   text-decoration: underline;
+}
+
+.highlight-index-tag-item:not(:first-child) {
+  border-top: 1px solid #eee;
+}
+
+.highlight-index-tag-item {
+  padding: 3px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.highlight-index-tag-item:hover {
+  background-color: #eee;
 }
 
 .highlights-index i {

@@ -5,18 +5,22 @@ import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 class HighlightIndexItem extends Component {
   handleTagClick(event) {
-    this.props.editHighlight(this.props.highlight._id, event.target.value);
+    debugger
+    this.props.editHighlight(this.props.highlight._id, event.currentTarget.value);
   }
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
       return (
-        <MenuItem
+        <div
+          className="highlight-index-tag-item"
           onClick={this.handleTagClick.bind(this)}
-          value={tag.title}
-          key={key}>
-          {tag.title}
-        </MenuItem>
+          key={key}
+          value={tag.title}>
+          <MenuItem>
+            {tag.title}
+          </MenuItem>
+        </div>
       );
     });
   }

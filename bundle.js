@@ -44562,7 +44562,8 @@
 	  _createClass(HighlightIndexItem, [{
 	    key: 'handleTagClick',
 	    value: function handleTagClick(event) {
-	      this.props.editHighlight(this.props.highlight._id, event.target.value);
+	      debugger;
+	      this.props.editHighlight(this.props.highlight._id, event.currentTarget.value);
 	    }
 	  }, {
 	    key: 'renderTags',
@@ -44571,12 +44572,17 @@
 
 	      return this.props.tags.map(function (tag, key) {
 	        return _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
+	          'div',
 	          {
+	            className: 'highlight-index-tag-item',
 	            onClick: _this2.handleTagClick.bind(_this2),
-	            value: tag.title,
-	            key: key },
-	          tag.title
+	            key: key,
+	            value: tag.title },
+	          _react2.default.createElement(
+	            _reactBootstrap.MenuItem,
+	            null,
+	            tag.title
+	          )
 	        );
 	      });
 	    }
