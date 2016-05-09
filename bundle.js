@@ -44404,7 +44404,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'wrapper' },
-	        _react2.default.createElement(_tags_index2.default, { tags: this.props.tags }),
+	        _react2.default.createElement(_tags_index2.default, null),
 	        _react2.default.createElement(_search_bar2.default, null),
 	        _react2.default.createElement(_highlights_index2.default, { tags: this.props.tags })
 	      );
@@ -44562,7 +44562,6 @@
 	  _createClass(HighlightIndexItem, [{
 	    key: 'handleTagClick',
 	    value: function handleTagClick(event) {
-	      debugger;
 	      this.props.editHighlight(this.props.highlight._id, event.currentTarget.value);
 	    }
 	  }, {
@@ -64079,9 +64078,10 @@
 	      var _this2 = this;
 
 	      return this.props.tags.map(function (tag, key) {
+	        var klass = tag.title === _this2.props.activeTag ? "tag-item active-tag-item" : "tag-item";
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'tag-item',
+	          { className: klass,
 	            onClick: function onClick() {
 	              _this2.onClickHighlight(tag.title);
 	            },
@@ -64184,7 +64184,14 @@
 	  return TagsIndex;
 	}(_react.Component);
 
-	exports.default = (0, _reactRedux.connect)(null, { createTag: _action_tags.createTag, setActiveTag: _action_tags.setActiveTag, filterHighlights: _action_highlights.filterHighlights })(TagsIndex);
+	function mapStateToProps(state) {
+	  return {
+	    tags: state.tags.all,
+	    activeTag: state.tags.active
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { createTag: _action_tags.createTag, setActiveTag: _action_tags.setActiveTag, filterHighlights: _action_highlights.filterHighlights })(TagsIndex);
 
 /***/ },
 /* 483 */

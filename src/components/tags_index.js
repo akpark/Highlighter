@@ -36,8 +36,9 @@ class TagsIndex extends Component {
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
+      let klass = (tag.title === this.props.activeTag) ? "tag-item active-tag-item" : "tag-item";
       return (
-        <div className="tag-item"
+        <div className={klass}
           onClick={() => {this.onClickHighlight(tag.title)}}
           key={key}>
           <NavItem>
@@ -100,4 +101,11 @@ class TagsIndex extends Component {
   }
 }
 
-export default connect(null, { createTag, setActiveTag, filterHighlights })(TagsIndex);
+function mapStateToProps(state) {
+  return {
+    tags: state.tags.all,
+    activeTag: state.tags.active
+  }
+}
+
+export default connect(mapStateToProps, { createTag, setActiveTag, filterHighlights })(TagsIndex);

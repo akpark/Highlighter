@@ -5,7 +5,6 @@ import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 class HighlightIndexItem extends Component {
   handleTagClick(event) {
-    debugger
     this.props.editHighlight(this.props.highlight._id, event.currentTarget.value);
   }
 

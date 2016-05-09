@@ -13,7 +13,7 @@ export default class Wrapper extends Component {
   render() {
     return (
       <div className="wrapper">
-        <TagsIndex tags={this.props.tags} />
+        <TagsIndex />
         <SearchBar />
         <HighlightsIndex tags={this.props.tags} />
       </div>

@@ -49,6 +49,10 @@
   background-color: #eee;
 }
 
+.active-tag-item {
+  background-color: #eee;
+}
+
 .highlights-index {
   margin-top: 20px;
 }
