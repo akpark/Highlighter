@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chrome-storage-promise": "^0.1.0",
     "chrome-storage-wrapper": "^0.1.4",
     "immutable": "^3.8.1",
     "jquery": "^2.2.3",
