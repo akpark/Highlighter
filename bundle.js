@@ -22740,7 +22740,7 @@
 	    case _constants.EDIT_HIGHLIGHT:
 	      var editedHighlight = _lodash2.default.filter(state.all, function (highlight) {
 	        return highlight._id === action.payload._id;
-	      });
+	      })[0];
 	      editedHighlight.tag_id = action.payload.newTag;
 	      var editedList = _lodash2.default.filter(state.all, function (highlight) {
 	        return highlight._id !== action.payload._id;
@@ -22751,8 +22751,7 @@
 	      var newActiveHighlights = _lodash2.default.filter(editedList, function (highlight) {
 	        return highlight.tag_name === action.payload.currentTag;
 	      });
-
-	      return { all: editedList, active: state.active };
+	      return { all: editedList, active: newActiveHighlights };
 
 	    case _constants.SEARCH_HIGHLIGHTS:
 	      var activeHighlights = _lodash2.default.filter(state.active, function (highlight) {
@@ -22761,10 +22760,10 @@
 	      return { all: state.all, active: activeHighlights };
 
 	    case _constants.FILTER_HIGHLIGHTS:
-	      debugger;
 	      var filteredHighlights = _lodash2.default.filter(state.all, function (highlight) {
 	        return highlight.tag_id === action.payload;
 	      });
+
 	      return { all: state.all, active: filteredHighlights };
 
 	    case _constants.DELETE_HIGHLIGHT:
@@ -22773,7 +22772,7 @@
 	      });
 	      chrome.storage.local.set({ "highlights": highlightsWithDelete });
 
-	      return { all: newHighlights, active: newHighlights };
+	      return { all: highlightsWithDelete, active: highlightsWithDelete };
 
 	    default:
 	      return state;
@@ -43965,8 +43964,10 @@
 	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
 	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
 	var FILTER_HIGHLIGHTS = exports.FILTER_HIGHLIGHTS = 'FILTER_HIGHLIGHTS';
+
 	var FETCH_TAGS = exports.FETCH_TAGS = 'FETCH_TAGS';
 	var CREATE_TAG = exports.CREATE_TAG = 'CREATE_TAG';
+	var SET_ACTIVE_TAG = exports.SET_ACTIVE_TAG = 'SET_ACTIVE_TAG';
 
 /***/ },
 /* 208 */
@@ -43984,13 +43985,16 @@
 
 	  switch (action.type) {
 	    case _constants.CREATE_TAG:
-	      var newTags = state.slice(0);
+	      var newTags = state.all.slice(0);
 	      newTags.push(action.payload);
 	      _chromeStorageWrapper2.default.set("tags", newTags, "local");
 	      return { all: newTags, active: "recent" };
 
 	    case _constants.FETCH_TAGS:
 	      return { all: action.payload.tags, active: "recent" };
+
+	    case _constants.SET_ACTIVE_TAG:
+	      return { all: state.all, active: action.payload };
 
 	    default:
 	      return state;
@@ -44370,7 +44374,7 @@
 
 	var _tags_index2 = _interopRequireDefault(_tags_index);
 
-	var _index = __webpack_require__(213);
+	var _action_tags = __webpack_require__(483);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44417,7 +44421,7 @@
 	  return { tags: state.tags.all };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchTags: _index.fetchTags })(Wrapper);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchTags: _action_tags.fetchTags })(Wrapper);
 
 /***/ },
 /* 212 */
@@ -44437,7 +44441,7 @@
 
 	var _reactRedux = __webpack_require__(169);
 
-	var _index = __webpack_require__(213);
+	var _action_highlights = __webpack_require__(215);
 
 	var _highlight_index_item = __webpack_require__(214);
 
@@ -44487,13 +44491,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (!this.props.activeHighlights) {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          'Loading...'
-	        );
-	      }
+	      // if (!this.props.activeHighlights) {
+	      //   return <div>Loading...</div>;
+	      // }
 
 	      return _react2.default.createElement(
 	        'div',
@@ -44517,30 +44517,10 @@
 	  };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _index.fetchHighlights, deleteHighlight: _index.deleteHighlight })(HighlightsIndex);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchHighlights: _action_highlights.fetchHighlights, deleteHighlight: _action_highlights.deleteHighlight })(HighlightsIndex);
 
 /***/ },
-/* 213 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _action_highlights = __webpack_require__(215);
-
-	var _action_highlights2 = _interopRequireDefault(_action_highlights);
-
-	var _action_tags = __webpack_require__(483);
-
-	var _action_tags2 = _interopRequireDefault(_action_tags);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var actions = {
-	  highlights: _action_highlights2.default,
-	  tags: _action_tags2.default
-	};
-
-/***/ },
+/* 213 */,
 /* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -44592,7 +44572,10 @@
 	      return this.props.tags.map(function (tag, key) {
 	        return _react2.default.createElement(
 	          _reactBootstrap.MenuItem,
-	          { onClick: _this2.handleTagClick.bind(_this2), value: tag.title, key: key },
+	          {
+	            onClick: _this2.handleTagClick.bind(_this2),
+	            value: tag.title,
+	            key: key },
 	          tag.title
 	        );
 	      });
@@ -44600,7 +44583,7 @@
 	  }, {
 	    key: 'onDeleteHighlight',
 	    value: function onDeleteHighlight(id) {
-	      (0, _action_highlights.deleteHighlight)(id);
+	      this.props.deleteHighlight(id);
 	    }
 	  }, {
 	    key: 'render',
@@ -44651,7 +44634,7 @@
 	  return HighlightIndexItem;
 	}(_react.Component);
 
-	exports.default = (0, _reactRedux.connect)(null, { editHighlight: _action_highlights.editHighlight })(HighlightIndexItem);
+	exports.default = (0, _reactRedux.connect)(null, { editHighlight: _action_highlights.editHighlight, deleteHighlight: _action_highlights.deleteHighlight })(HighlightIndexItem);
 
 /***/ },
 /* 215 */
@@ -63965,7 +63948,6 @@
 	      this.setState({ term: event.target.value });
 	      if (event.target.value == "") {
 	        this.props.filterHighlights(this.props.tags.active);
-	        debugger;
 	      } else {
 	        this.props.searchHighlights(event.target.value);
 	      }
@@ -64082,6 +64064,7 @@
 	  }, {
 	    key: 'onClickHighlight',
 	    value: function onClickHighlight(tag_title) {
+	      this.props.setActiveTag(tag_title);
 	      this.props.filterHighlights(tag_title);
 	    }
 	  }, {
@@ -64091,13 +64074,17 @@
 
 	      return this.props.tags.map(function (tag, key) {
 	        return _react2.default.createElement(
-	          _reactBootstrap.NavItem,
-	          {
+	          'div',
+	          { className: 'tag-item',
 	            onClick: function onClick() {
 	              _this2.onClickHighlight(tag.title);
 	            },
 	            key: key },
-	          tag.title
+	          _react2.default.createElement(
+	            _reactBootstrap.NavItem,
+	            null,
+	            tag.title
+	          )
 	        );
 	      });
 	    }
@@ -64135,7 +64122,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'h3',
-	            { className: '' },
+	            { className: 'tags-header-title' },
 	            'Tags'
 	          )
 	        ),
@@ -64191,7 +64178,7 @@
 	  return TagsIndex;
 	}(_react.Component);
 
-	exports.default = (0, _reactRedux.connect)(null, { createTag: _action_tags.createTag, filterHighlights: _action_highlights.filterHighlights })(TagsIndex);
+	exports.default = (0, _reactRedux.connect)(null, { createTag: _action_tags.createTag, setActiveTag: _action_tags.setActiveTag, filterHighlights: _action_highlights.filterHighlights })(TagsIndex);
 
 /***/ },
 /* 483 */
@@ -64204,6 +64191,7 @@
 	});
 	exports.fetchTags = fetchTags;
 	exports.createTag = createTag;
+	exports.setActiveTag = setActiveTag;
 
 	var _chromeStorageWrapper = __webpack_require__(209);
 
@@ -64231,6 +64219,13 @@
 	  return {
 	    type: _constants.CREATE_TAG,
 	    payload: newTag
+	  };
+	}
+
+	function setActiveTag(tag) {
+	  return {
+	    type: _constants.SET_ACTIVE_TAG,
+	    payload: tag
 	  };
 	}
 

@@ -10,12 +10,19 @@ class HighlightIndexItem extends Component {
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
-      return <MenuItem onClick={this.handleTagClick.bind(this)} value={tag.title} key={key}>{tag.title}</MenuItem>;
+      return (
+        <MenuItem
+          onClick={this.handleTagClick.bind(this)}
+          value={tag.title}
+          key={key}>
+          {tag.title}
+        </MenuItem>
+      );
     });
   }
 
   onDeleteHighlight(id) {
-    deleteHighlight(id);
+    this.props.deleteHighlight(id);
   }
 
   render() {
@@ -40,4 +47,4 @@ class HighlightIndexItem extends Component {
   }
 }
 
-export default connect(null, { editHighlight })(HighlightIndexItem);
+export default connect(null, { editHighlight, deleteHighlight })(HighlightIndexItem);

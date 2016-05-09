@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createTag } from '../actions/action_tags';
+import { createTag, setActiveTag } from '../actions/action_tags';
 import { filterHighlights } from '../actions/action_highlights';
 import { Nav, NavItem, Modal, Button, FormGroup, FormControl, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -30,17 +30,20 @@ class TagsIndex extends Component {
   }
 
   onClickHighlight(tag_title) {
+    this.props.setActiveTag(tag_title);
     this.props.filterHighlights(tag_title);
   }
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
       return (
-        <NavItem
+        <div className="tag-item"
           onClick={() => {this.onClickHighlight(tag.title)}}
           key={key}>
-          {tag.title}
-        </NavItem>
+          <NavItem>
+            {tag.title}
+          </NavItem>
+        </div>
       );
     })
   }
@@ -66,7 +69,7 @@ class TagsIndex extends Component {
             bsSize="small"
             onClick={this.openModal}
             ><i className="fa fa-plus-square-o"></i></Button>
-          <h3 className="">Tags</h3>
+          <h3 className="tags-header-title">Tags</h3>
         </div>
 
         <Nav bsStyle="pills" stacked>
@@ -97,4 +100,4 @@ class TagsIndex extends Component {
   }
 }
 
-export default connect(null, { createTag, filterHighlights })(TagsIndex);
+export default connect(null, { createTag, setActiveTag, filterHighlights })(TagsIndex);

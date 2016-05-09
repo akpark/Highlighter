@@ -15,7 +15,6 @@ class SearchBar extends Component {
     this.setState({ term: event.target.value });
     if (event.target.value == "") {
       this.props.filterHighlights(this.props.tags.active);
-      debugger
     } else {
       this.props.searchHighlights(event.target.value);
     }

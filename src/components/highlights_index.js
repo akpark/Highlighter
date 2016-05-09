@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchHighlights, deleteHighlight } from '../actions/index';
+import { fetchHighlights, deleteHighlight, filterHighlights } from '../actions/action_highlights';
 import HighlightIndexItem from './highlight_index_item';
 
 class HighlightsIndex extends Component {
@@ -27,9 +27,9 @@ class HighlightsIndex extends Component {
   }
 
   render() {
-    if (!this.props.activeHighlights) {
-      return <div>Loading...</div>;
-    }
+    // if (!this.props.activeHighlights) {
+    //   return <div>Loading...</div>;
+    // }
 
     return (
       <div className="highlights-index col-xs-9 col-sm-9 col-md-9 col-lg-9 pull-right">

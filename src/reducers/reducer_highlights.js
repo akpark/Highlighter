@@ -17,7 +17,7 @@ export default function(state = INITIAL_STATE, action) {
     case EDIT_HIGHLIGHT:
       let editedHighlight = _.filter(state.all, function(highlight) {
         return highlight._id === action.payload._id;
-      });
+      })[0];
       editedHighlight.tag_id = action.payload.newTag;
       let editedList = _.filter(state.all, function(highlight) {
         return highlight._id !== action.payload._id;
@@ -27,9 +27,8 @@ export default function(state = INITIAL_STATE, action) {
 
       let newActiveHighlights = _.filter(editedList, function(highlight) {
         return highlight.tag_name === action.payload.currentTag;
-      })
-
-      return { all: editedList, active: state.active };
+      });
+      return { all: editedList, active: newActiveHighlights };
 
     case SEARCH_HIGHLIGHTS:
       const activeHighlights = _.filter(state.active, function(highlight) {
@@ -38,10 +37,10 @@ export default function(state = INITIAL_STATE, action) {
       return { all: state.all, active: activeHighlights };
 
     case FILTER_HIGHLIGHTS:
-      debugger
       const filteredHighlights = _.filter(state.all, ((highlight) => {
         return highlight.tag_id === action.payload;
       }));
+
       return { all: state.all, active: filteredHighlights };
 
     case DELETE_HIGHLIGHT:
@@ -50,7 +49,7 @@ export default function(state = INITIAL_STATE, action) {
       });
       chrome.storage.local.set({"highlights": highlightsWithDelete});
 
-      return { all: newHighlights, active: newHighlights };
+      return { all: highlightsWithDelete, active: highlightsWithDelete };
 
     default:
       return state;

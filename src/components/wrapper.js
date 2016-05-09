@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import HighlightsIndex from './highlights_index';
 import SearchBar from './search_bar';
 import TagsIndex from './tags_index';
-import { fetchTags } from '../actions/index';
+import { fetchTags } from '../actions/action_tags';
 
 export default class Wrapper extends Component {
   componentWillMount() {
