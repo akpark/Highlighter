@@ -44525,71 +44525,20 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.FETCH_TAGS = exports.SEARCH_HIGHLIGHTS = exports.DELETE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = exports.FETCH_HIGHLIGHTS = undefined;
-	exports.fetchHighlights = fetchHighlights;
-	exports.deleteHighlight = deleteHighlight;
-	exports.searchHighlights = searchHighlights;
-	exports.fetchTags = fetchTags;
+	var _action_highlights = __webpack_require__(215);
 
-	var _chromeStorageWrapper = __webpack_require__(209);
+	var _action_highlights2 = _interopRequireDefault(_action_highlights);
 
-	var _chromeStorageWrapper2 = _interopRequireDefault(_chromeStorageWrapper);
+	var _action_tags = __webpack_require__(483);
+
+	var _action_tags2 = _interopRequireDefault(_action_tags);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FETCH_HIGHLIGHTS = exports.FETCH_HIGHLIGHTS = 'FETCH_HIGHLIGHTS';
-	var CREATE_HIGHLIGHT = exports.CREATE_HIGHLIGHT = 'CREATE_HIGHLIGHT';
-	var DELETE_HIGHLIGHT = exports.DELETE_HIGHLIGHT = 'DELETE_HIGHLIGHT';
-	var SEARCH_HIGHLIGHTS = exports.SEARCH_HIGHLIGHTS = 'SEARCH_HIGHLIGHTS';
-
-	var FETCH_TAGS = exports.FETCH_TAGS = 'FETCH_TAGS';
-
-	function fetchHighlights() {
-	  var request = _chromeStorageWrapper2.default.get("highlights", "local");
-
-	  return {
-	    type: FETCH_HIGHLIGHTS,
-	    payload: request
-	  };
-	}
-
-	function createHighlight(newHighlight) {
-	  var request = _chromeStorageWrapper2.default.get("highlights", "local").then(function (result) {
-	    var highlights = result.highlights.push(newHighlight);
-	    _chromeStorageWrapper2.default.set("highlights", highlights, "local");
-	  });
-
-	  return {
-	    type: CREATE_HIGHLIGHT,
-	    payload: request
-	  };
-	}
-
-	function deleteHighlight(id) {
-	  return {
-	    type: DELETE_HIGHLIGHT,
-	    payload: id
-	  };
-	}
-
-	function searchHighlights(term) {
-	  return {
-	    type: SEARCH_HIGHLIGHTS,
-	    payload: term
-	  };
-	}
-
-	function fetchTags() {
-	  var request = _chromeStorageWrapper2.default.get("tags", "local");
-
-	  return {
-	    type: FETCH_TAGS,
-	    payload: request
-	  };
-	}
+	var actions = {
+	  highlights: _action_highlights2.default,
+	  tags: _action_tags2.default
+	};
 
 /***/ },
 /* 214 */
