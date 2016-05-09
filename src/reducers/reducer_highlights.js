@@ -32,7 +32,7 @@ export default function(state = INITIAL_STATE, action) {
       return { all: editedList, active: state.active };
 
     case SEARCH_HIGHLIGHTS:
-      const activeHighlights = _.filter(state.all, function(highlight) {
+      const activeHighlights = _.filter(state.active, function(highlight) {
         return _.includes(highlight.description, action.payload);
       });
       return { all: state.all, active: activeHighlights };

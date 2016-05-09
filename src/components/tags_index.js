@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createTag } from '../actions/action_tags';
 import { filterHighlights } from '../actions/action_highlights';
 import { Nav, NavItem, Modal, Button, FormGroup, FormControl, MenuItem } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 class TagsIndex extends Component {
   constructor(props) {

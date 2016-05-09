@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { editHighlight } from '../actions/action_highlights';
+import { editHighlight, deleteHighlight } from '../actions/action_highlights';
 import { ButtonToolbar, DropdownButton, MenuItem } from 'react-bootstrap';
 
 class HighlightIndexItem extends Component {
@@ -12,6 +12,10 @@ class HighlightIndexItem extends Component {
     return this.props.tags.map((tag, key) => {
       return <MenuItem onClick={this.handleTagClick.bind(this)} value={tag.title} key={key}>{tag.title}</MenuItem>;
     });
+  }
+
+  onDeleteHighlight(id) {
+    deleteHighlight(id);
   }
 
   render() {
