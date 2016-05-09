@@ -35,7 +35,13 @@ class TagsIndex extends Component {
 
   renderTags() {
     return this.props.tags.map((tag, key) => {
-      return <NavItem onClick={() => {this.onClickHighlight(tag.title)}} key={key}>{tag.title}</NavItem>;
+      return (
+        <NavItem
+          onClick={() => {this.onClickHighlight(tag.title)}}
+          key={key}>
+          {tag.title}
+        </NavItem>
+      );
     })
   }
 

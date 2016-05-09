@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { searchHighlights } from '../actions/index';
+import { searchHighlights, filterHighlights } from '../actions/action_highlights';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -13,7 +13,12 @@ class SearchBar extends Component {
 
   onInputChange(event) {
     this.setState({ term: event.target.value });
-    this.props.searchHighlights(event.target.value);
+    if (event.target.value == "") {
+      this.props.filterHighlights(this.props.tags.active);
+      debugger
+    } else {
+      this.props.searchHighlights(event.target.value);
+    }
   }
 
   onFormSubmit(event) {
@@ -40,4 +45,8 @@ class SearchBar extends Component {
   }
 }
 
-export default connect(null, { searchHighlights })(SearchBar);
+function mapStateToProps(state) {
+  return { tags: state.tags }
+}
+
+export default connect(mapStateToProps, { searchHighlights, filterHighlights })(SearchBar);

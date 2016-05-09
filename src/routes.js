@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import { App } from './components/app';
+import { App } from './components/wrapper';
 
 export default (
-  <Route path="/" component={App} >
-    <Route path="/tags/:name" >
+  <Route path='/index.html' component={App}>
+    <IndexRoute component={App} />
+    <Route path="/tags/:name" />
   </Route>
 )
