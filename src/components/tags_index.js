@@ -31,6 +31,7 @@ class TagsIndex extends Component {
 
   onClickHighlight(tag_title) {
     if (tag_title === "all") {
+      this.props.fetchHighlights();
       this.props.setActiveTag("all");
     } else {
       this.props.setActiveTag(tag_title);

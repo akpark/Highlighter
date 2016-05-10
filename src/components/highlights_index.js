@@ -39,7 +39,7 @@ class HighlightsIndex extends Component {
 
 function mapStateToProps(state) {
   return {
-    activeHighlights: state.highlights.all,
+    activeHighlights: state.highlights.active,
     activeTag: state.tags.active
   };
 }
